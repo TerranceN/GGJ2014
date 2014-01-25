@@ -16,10 +16,10 @@ package ata
             super(0, 0);
 			reality = new level1_reality()
             position.y = 300;
-			//addDisplay(World.REALITY, reality);
+			addDisplay(World.REALITY, reality);
 			
 			realityCollision = new level1_reality_hitbox()
-            //realityCollision.alpha = 0;
+            realityCollision.alpha = 0;
 			addDisplay(World.REALITY, realityCollision);
 		}
 	}

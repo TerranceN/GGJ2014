@@ -38,30 +38,42 @@ package ata
         
         public function addDisplay(world:String, obj:DisplayObject):void
         {
-            displayObjects[world] = obj;
+            if (displayObjects[world] == undefined)
+            {
+                displayObjects[world] = new Vector.<DisplayObject>();
+            }
+            displayObjects[world].push(obj);
         }
         
         public function addAdditiveMask(world:String, obj:DisplayObject):void
         {
-            additiveMasks[world] = obj;
+            if (additiveMasks[world] == undefined)
+            {
+                additiveMasks[world] = new Vector.<DisplayObject>();
+            }
+            additiveMasks[world].push(obj);
         }
         
         public function addSubtractiveMask(world:String, obj:DisplayObject):void
         {
-            subtractiveMasks[world] = obj;
+            if (subtractiveMasks[world] == undefined)
+            {
+                subtractiveMasks[world] = new Vector.<DisplayObject>();
+            }
+            subtractiveMasks[world].push(obj);
         }
         
-        public function addRadialAdditiveMask(world:String, radius:Number, fuzz:Number=30):void
+        public function addRadialAdditiveMask(world:String, radius:Number, fuzz:Number=50):void
         {
             var additiveMask:Sprite = new Sprite();
             var subtractiveMask:Sprite = new Sprite();
             
             var m:Matrix = new Matrix();
             m.createGradientBox(radius*2, radius*2, 0, -radius, -radius);
-            subtractiveMask.graphics.beginGradientFill(GradientType.RADIAL, [0, 0] , [1, 0], [255 - (255 * fuzz / radius), 255], m);
+            subtractiveMask.graphics.beginGradientFill(GradientType.RADIAL, [0, 0] , [1, 0.05], [255 - (255 * fuzz / radius), 255], m);
             subtractiveMask.graphics.drawCircle(0, 0, radius);
             subtractiveMask.graphics.endFill();
-            addSubtractiveMask(world, subtractiveMask);
+            //addSubtractiveMask(world, subtractiveMask);
             
             additiveMask.graphics.beginFill(0x000000);
             additiveMask.graphics.drawCircle(0, 0, radius);
@@ -69,13 +81,13 @@ package ata
             addAdditiveMask(world, additiveMask);
         }
         
-        public function addRadialSubtractiveMask(world:String, radius:Number, fuzz:Number=30):void
+        public function addRadialSubtractiveMask(world:String, radius:Number, fuzz:Number=50):void
         {
             var subtractiveMask:Sprite = new Sprite();
             
             var m:Matrix = new Matrix();
             m.createGradientBox(radius*2, radius*2, 0, -radius, -radius);
-            subtractiveMask.graphics.beginGradientFill(GradientType.RADIAL, [0, 0] , [0, 1], [255 - (255 * fuzz / radius), 255], m);
+            subtractiveMask.graphics.beginGradientFill(GradientType.RADIAL, [0, 0] , [0.05, 1], [255 - (255 * fuzz / radius), 255], m);
             subtractiveMask.graphics.drawCircle(0, 0, radius);
             subtractiveMask.graphics.endFill();
             addSubtractiveMask(world, subtractiveMask);
@@ -113,22 +125,36 @@ package ata
 			//y = position.y;
             var world:World;
             var worldString:String;
+            var objects:Vector.<DisplayObject>;
+            var displayObject:DisplayObject;
             for (worldString in displayObjects)
             {
-                displayObjects[worldString].x = position.x;
-                displayObjects[worldString].y = position.y;
+                objects = displayObjects[worldString];
+                for each (displayObject in objects)
+                {
+                    displayObject.x = position.x;
+                    displayObject.y = position.y;
+                }
             }
             
             for (worldString in additiveMasks)
             {
-                additiveMasks[worldString].x = position.x;
-                additiveMasks[worldString].y = position.y;
+                objects = additiveMasks[worldString];
+                for each (displayObject in objects)
+                {
+                    displayObject.x = position.x;
+                    displayObject.y = position.y;
+                }
             }
             
             for (worldString in subtractiveMasks)
             {
-                subtractiveMasks[worldString].x = position.x;
-                subtractiveMasks[worldString].y = position.y;
+                objects = subtractiveMasks[worldString];
+                for each (displayObject in objects)
+                {
+                    displayObject.x = position.x;
+                    displayObject.y = position.y;
+                }
             }
 		}
 	}

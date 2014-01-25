@@ -48,11 +48,11 @@ package ata
 
             addEventListener(Event.ENTER_FRAME, update);
 
-            player = new Player(w/2, h/2);
-            addEntity(player);
-
             level = new Level();
             addEntity(level);
+            
+            player = new Player(w/2, h/2);
+            addEntity(player);
             
             var realWorld:World = new World();
             worldMap[World.REALITY] = realWorld;
@@ -66,7 +66,6 @@ package ata
         public function update(dt:Number):void {
             var t:uint = getTimer();
             dt =  Math.min(0.1, (t - totaltime) / 1000);
-            trace("FPS", 1000/(t - totaltime))
             totaltime = t;
 
             if (!Paused)
@@ -141,26 +140,40 @@ package ata
         {
             var world:World;
             var worldString:String;
+            var displayObjects:Vector.<DisplayObject>;
+            var displayObject:DisplayObject;
             entities.push(e);
             for (worldString in e.displayObjects)
             {
                 makeWorldIfNotExists(worldString);
                 world = worldMap[worldString];
-                world.display.addChild(e.displayObjects[worldString]);
+                displayObjects = e.displayObjects[worldString];
+                for each (displayObject in displayObjects)
+                {
+                    world.display.addChild(displayObject);
+                }
             }
             
             for (worldString in e.additiveMasks)
             {
                 makeWorldIfNotExists(worldString);
                 world = worldMap[worldString];
-                world.additiveMask.addChild(e.additiveMasks[worldString]);
+                displayObjects = e.additiveMasks[worldString];
+                for each (displayObject in displayObjects)
+                {
+                    world.additiveMask.addChild(displayObject);
+                }
             }
             
             for (worldString in e.subtractiveMasks)
             {
                 makeWorldIfNotExists(worldString);
                 world = worldMap[worldString];
-                world.subtractiveMask.addChild(e.subtractiveMasks[worldString]);
+                displayObjects = e.subtractiveMasks[worldString];
+                for each (displayObject in displayObjects)
+                {
+                    world.subtractiveMask.addChild(displayObject);
+                }
             }
         }
 

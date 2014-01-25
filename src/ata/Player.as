@@ -34,6 +34,7 @@ package ata
             addDisplay(World.IMAGINATION, playerImag);
             
             addRadialAdditiveMask(World.REALITY, 500);
+            addRadialSubtractiveMask(World.REALITY, 300);
             addRadialAdditiveMask(World.IMAGINATION, 300);
         }
 
