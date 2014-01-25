@@ -1,8 +1,7 @@
 package ata
 {
-	import flash.display.DisplayObject;
+    import flash.display.DisplayObject;
     import flash.display.Sprite;
-    import flash.geom.Point;
 
     /**
      * ...
@@ -10,41 +9,46 @@ package ata
      */
     public class Entity extends Sprite
     {
-        public var w:int;
-        public var h:int;
-        public var vx:Number;
-        public var vy:Number;
+        public var size:Vector2;
+        public var speed:Vector2;
+        public var position:Vector2;
+        public var testPosition:Sprite;
 
         public function Entity(w:int, h:int) {
-            this.w = w;
-            this.h = h;
-            vx = 0;
-            vy = 0;
+            position = new Vector2(0, 0);
+            speed = new Vector2(0, 0);
+            this.size = new Vector2(w, h);
+            testPosition = new Sprite();
+
+            testPosition.graphics.beginFill(0xff0000);
+            testPosition.graphics.drawCircle(0, 0, 10);
         }
 
         public function update(input:Input, dt:Number, level:Level):void {
-            x = x + vx * dt;
-            y = y + vy * dt;
+            position = position.add(speed.times(dt));
+            x = position.x;
+            y = position.y;
         }
 
         public function handleLevelCollision(dt:Number, displayObject:DisplayObject):Boolean {
-            var diff:Point = new Point(vx * dt, vy * dt)
+            var diff:Vector2 = speed.times(dt)
 
-            var bounds = this.getRect(this.parent);
-
-            var test = displayObject.hitTestPoint(bounds.x, bounds.y + bounds.height + diff.y, true);
+            var checkPosition:Vector2 = new Vector2(displayObject.parent.x + position.x, displayObject.parent.y + position.y + size.y)
+            var test = displayObject.hitTestPoint(checkPosition.x, checkPosition.y + diff.y, true);
 
             if (test) {
-                if (vy > 0) {
+                testPosition.x = position.x
+                testPosition.y = position.y + size.y + diff.y
+                if (speed.y > 0) {
                     var move:Number = 0
-                    test = displayObject.hitTestPoint(bounds.x, bounds.y + bounds.height + move, true);
+                    test = displayObject.hitTestPoint(checkPosition.x, checkPosition.y + move, true);
                     while (!test) {
-                        test = displayObject.hitTestPoint(bounds.x, bounds.y + bounds.height + move, true);
+                        test = displayObject.hitTestPoint(checkPosition.x, checkPosition.y + move, true);
                         move += 1;
                     }
-                    vy = move / dt;
+                    speed.y = move / dt;
                 } else {
-                    vy = 0
+                    speed.y = 0
                 }
                 return true;
             }
@@ -53,8 +57,8 @@ package ata
         }
 
         public function draw():void {
-            graphics.lineStyle(1, 0x000000);
-            graphics.drawRect(0 ,0 , w, h);
+            graphics.lineStyle(1, 0x000000, 0.5);
+            graphics.drawRect(0 ,0 , size.x, size.y);
         }
     }
 

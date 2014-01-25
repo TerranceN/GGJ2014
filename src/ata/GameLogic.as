@@ -4,6 +4,7 @@ package ata
     import flash.display.MovieClip;
     import flash.display.Sprite;
     import flash.events.Event;
+    import flash.geom.Point;
     import flash.utils.getTimer;
     /**
      * ...
@@ -20,7 +21,7 @@ package ata
         public var totaltime:Number = 0;
 
         public var overtime:Number = 0;
-        public static var T:Number = 0.02; // time between fixed update frames
+        public static var T:Number = 0.033; // time between fixed update frames
         public static var ground:int = 400;
         private var w:int;
         private var h:int;
@@ -30,6 +31,10 @@ package ata
 
         private var level:Level;
 
+        private var cameraOffset:Point = new Point(400, 300);
+        private var cameraVelocity:Point = new Point(0, 0);
+        private var camera:Point = new Point(400, 450);
+
         public function GameLogic(w:int, h:int, input:Input) 
         {
             this.w = w;
@@ -38,10 +43,11 @@ package ata
 
             addEventListener(Event.ENTER_FRAME, update);
 
+            level = new Level(this);
+
             player = new Player(w/2, h/2);
             addChild(player);
-
-            level = new Level(this);
+            addChild(player.testPosition);
         }
 
         public function update(dt:Number):void {
@@ -62,6 +68,40 @@ package ata
             }
         }
 
+        private function updateCamera(dt:Number):void
+        {
+            camera.x += cameraVelocity.x * dt;
+            camera.y += cameraVelocity.y * dt;
+
+            var cameraVelocityDelta:Point = new Point(0,0);
+            var nextCameraVelocityDelta:Point = new Point(0,0);
+            cameraVelocityDelta.x = (player.position.x - cameraOffset.x - camera.x) * 4;
+            cameraVelocityDelta.y = (player.position.y - cameraOffset.y - camera.y) * 4;
+
+            if (cameraVelocityDelta.x * cameraVelocity.x < 0)
+            {
+                cameraVelocity.x = 0;
+            }
+            else
+            {
+                cameraVelocity.x += cameraVelocityDelta.x;
+                cameraVelocity.x *= 0.5;
+            }
+
+            if (cameraVelocityDelta.y * cameraVelocity.y < 0)
+            {
+                cameraVelocity.y = 0;
+            }
+            else
+            {
+                cameraVelocity.y += cameraVelocityDelta.y;
+                cameraVelocity.y *= 0.5;
+            }
+
+            this.x = -camera.x
+            this.y = -camera.y
+        }
+
         private function updateHUD():void 
         {
         }
@@ -69,6 +109,7 @@ package ata
         public function fixedupdate(dt:Number):void //dt is 1/50th of a second
         {
             player.update(input, dt, level);
+            updateCamera(dt);
         }
 
         public function stoplistening():void

@@ -24,8 +24,6 @@ package ata
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
 			
-			
-					
 			input = new Input(stage);
 			addChild(new GameLogic(stage.stageWidth, stage.stageHeight, input));
 		}

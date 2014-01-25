@@ -13,11 +13,11 @@ package ata
 		
 		public function Level(parent:Sprite) 
 		{
-			reality = new Level1Reality()
-			reality.y = 400;
-			//parent.addChild(reality)
+			reality = new level1_reality()
+			reality.y = 500;
+			parent.addChild(reality)
 			
-			realityCollision = new Level1RealityHitbox()
+			realityCollision = new level1_reality_hitbox()
 			realityCollision.y = 500;
 			parent.addChild(realityCollision)
 		}
