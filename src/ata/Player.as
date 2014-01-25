@@ -30,7 +30,9 @@ package ata
 
             playerReal = new PlayeRealWalk();
             playerImag = new PlayerImag();
+            playerReal.scaleY = playerImag.scaleY = playerReal.scaleX = playerImag.scaleX = IMG_SCALE;
             
+            // for now, show player as always real to show walk animation
             addDisplay(World.REALITY, playerReal);
             addDisplay(World.IMAGINATION, playerImag);
             
