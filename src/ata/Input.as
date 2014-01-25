@@ -89,7 +89,7 @@
 			dmy = stage.mouseY - oldmousey;
 			oldmousex = stage.mouseX;
 			oldmousey = stage.mouseY;
-			for (var key:String in keys) {
+			for each (var key:uint in keys) {
 				switch (keys[key]) {
 					case released:
 						keys[key] = up;

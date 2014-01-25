@@ -14,15 +14,16 @@ package ata
 
         public var playerReal:DisplayObject;
         public var playerImag:MovieClip;
+        private static const IMG_SCALE:Number = 0.7;
 
         private static const MAX_SPEED:Number = 250;
         private static const ACCEL:Number = 600;
         private static const DECEL:Number = 600;
-        private static const JUMP:Number = 500;
-        private static const GRAVITY:Number = 600;
+        private static const JUMP:Number = 450;
+        private static const GRAVITY:Number = 700;
         
         public function Player(x:int, y:int) {
-            super(40, 130);
+            super(40*IMG_SCALE, 130*IMG_SCALE);
             this.position = new Vector2(x, y);
             this.x = x;
             this.y = y;
@@ -57,9 +58,9 @@ package ata
                 speed.x = Math.max(0, speed.x - DECEL * dt);
             }
             if (speed.x < 0) {
-                playerReal.scaleX = playerImag.scaleX = -1;
+                playerReal.scaleX = playerImag.scaleX = -IMG_SCALE;
             } else if (speed.x > 0) {
-                playerReal.scaleX = playerImag.scaleX = 1;
+                playerReal.scaleX = playerImag.scaleX = IMG_SCALE;
             }
             var hitGround:Boolean = handleLevelCollision(dt, level.realityCollision)
 
