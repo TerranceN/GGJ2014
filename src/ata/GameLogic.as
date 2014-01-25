@@ -68,8 +68,7 @@ package ata
 
         public function fixedupdate(dt:Number):void //dt is 1/50th of a second
         {
-            player.handleLevelCollision(level);
-            player.update(input, dt);
+            player.update(input, dt, level);
         }
 
         public function stoplistening():void
