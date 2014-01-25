@@ -9,8 +9,8 @@ package ata
 	 */
 	public class Player extends Entity
 	{
-		var playerReal:DisplayObject;
-        var playerImag:DisplayObject;
+		private var playerReal:DisplayObject;
+        private var playerImag:DisplayObject;
         
 		public function Player(x:int, y:int) {
 			super(40, 130);
@@ -20,7 +20,11 @@ package ata
 			
             playerReal = new PlayerReal();
 			playerImag = new PlayerImag();
-			draw();
+            
+            addDisplay(World.REALITY, playerReal);
+            addDisplay(World.IMAGINATION, playerImag);
+            
+            addRadialAdditiveMask(World.REALITY, 200);
 		}
 		
 		override public function update(input:Input, dt:Number):void {
@@ -44,14 +48,6 @@ package ata
             }
 			super.update(input, dt);
 		}
-        
-        override public function draw():void {
-            super.draw();
-            playerReal.x = playerImag.x = size.x / 2;
-            playerReal.y = playerImag.y = size.y;
-            //addChild(playerReal);
-            addChild(playerImag);
-        }
 	}
 	
 }

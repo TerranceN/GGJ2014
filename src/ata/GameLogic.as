@@ -31,9 +31,13 @@ package ata
 
         private var level:Level;
         
+        private var entities:Vector.<Entity> = new Vector.<Entity>();
+        
+        private var worldMap:Object = {};
+        
         private var cameraOffset:Point = new Point(400, 450);
         private var cameraVelocity:Point = new Point(0, 0);
-        private var camera:Point = new Point(400, 450);
+        private var camera:Point = new Point(0, 0);
 
         public function GameLogic(w:int, h:int, input:Input) 
         {
@@ -44,9 +48,18 @@ package ata
             addEventListener(Event.ENTER_FRAME, update);
 
             player = new Player(w/2, h/2);
-            addChild(player);
+            addEntity(player);
 
             level = new Level(this);
+            addEntity(level);
+            
+            var realWorld:World = new World();
+            worldMap[World.REALITY] = realWorld;
+            addChild(realWorld);
+            
+            var imgWorld:World = new World();
+            worldMap[World.IMAGINATION] = imgWorld;
+            addChild(imgWorld);
         }
 
         public function update(dt:Number):void {
@@ -108,8 +121,46 @@ package ata
         public function fixedupdate(dt:Number):void //dt is 1/50th of a second
         {
             player.update(input, dt);
+            level.update(input, dt);
             
             updateCamera(dt);
+        }
+        
+        private function makeWorldIfNotExists(worldString:String):void
+        {
+            if (worldMap[worldString] == undefined)
+            {
+                var world:World = new World();
+                addChildAt(world, 0);
+                worldMap[worldString] = world;
+            }
+        }
+        
+        private function addEntity(e:Entity):void
+        {
+            var world:World;
+            var worldString:String;
+            entities.push(e);
+            for (worldString in e.displayObjects)
+            {
+                makeWorldIfNotExists(worldString);
+                world = worldMap[worldString];
+                world.display.addChild(e.displayObjects[worldString]);
+            }
+            
+            for (worldString in e.additiveMasks)
+            {
+                makeWorldIfNotExists(worldString);
+                world = worldMap[worldString];
+                world.additiveMask.addChild(e.additiveMasks[worldString]);
+            }
+            
+            for (worldString in e.subtractiveMasks)
+            {
+                makeWorldIfNotExists(worldString);
+                world = worldMap[worldString];
+                world.subtractiveMask.addChild(e.subtractiveMasks[worldString]);
+            }
         }
 
         public function stoplistening():void
