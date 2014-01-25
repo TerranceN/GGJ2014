@@ -11,6 +11,7 @@ package ata
 	[Frame(factoryClass="ata.Preloader")]
 	public class Main extends Sprite 
 	{
+		private var input:Input;
 		
 		public function Main():void 
 		{
@@ -35,8 +36,9 @@ package ata
 			var player:Player;
 			player = new Player(100, 100);
 			addChild(player);			
+			input = new Input(stage);
+			addChild(new GameLogic(stage.stageWidth, stage.stageHeight, input));
 		}
-
+		
 	}
-
 }
