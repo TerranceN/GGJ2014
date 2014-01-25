@@ -14,7 +14,7 @@ package ata
         public var imgReal:MovieClip;
         public var imgImag:MovieClip;
         private static const IMG_SCALE:Number = 0.7;
-        private static const SPEED:Number = 300;
+        private static const SPEED:Number = 150;
         
         public function Bird(x:int, y:int) {
             super(40*IMG_SCALE, 40*IMG_SCALE);
@@ -33,9 +33,9 @@ package ata
         }
 
         override public function update(input:Input, dt:Number, level:Level):void {
-            if (position.x > 300) {
+            if (position.x > 600) {
                 speed.x = -SPEED;
-            } else if (position.x < -300) {
+            } else if (position.x < -100) {
                 speed.x = SPEED;
             }
 
