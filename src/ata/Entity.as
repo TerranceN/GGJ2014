@@ -85,7 +85,7 @@ package ata
             var diff:Vector2 = speed.times(dt)
 
             var checkPosition:Vector2 = new Vector2(-GameLogic.camera.x + position.x, -GameLogic.camera.y + position.y )
-            var test = displayObject.hitTestPoint(checkPosition.x, checkPosition.y + diff.y, true);
+            var test:Boolean = displayObject.hitTestPoint(checkPosition.x, checkPosition.y + diff.y, true);
             
             if (test) {
                 testPosition.x = position.x
