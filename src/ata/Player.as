@@ -30,9 +30,13 @@ package ata
 
             playerReal = new PlayeRealWalk();
             playerImag = new PlayerImag();
+            playerReal.scaleY = playerImag.scaleY = playerReal.scaleX = playerImag.scaleX = IMG_SCALE;
             
-            addDisplay(World.REALITY, playerReal);
-            addDisplay(World.IMAGINATION, playerImag);
+            // for now, show player as always real to show walk animation
+            addDisplay(World.IMAGINATION, playerReal);
+            addDisplay(World.REALITY, playerImag);
+            //addDisplay(World.REALITY, playerReal);
+            //addDisplay(World.IMAGINATION, playerImag);
             
             addRadialAdditiveMask(World.REALITY, 500);
             addRadialSubtractiveMask(World.REALITY, 300);
