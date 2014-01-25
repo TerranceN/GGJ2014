@@ -63,6 +63,8 @@ package ata
 				}
 				updateHUD();
 			}
+			
+			updateCamera();
 		}
 		
 		private function updateCamera():void
