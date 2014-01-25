@@ -23,7 +23,9 @@ package ata
         public var additiveMasks:Object = {};
         
         //MAP STRING -> DISPLAY OBJECT
-        public var subtractiveMasks:Object = {};
+        public var subtractiveMasks:Object = { };
+        
+        public static const GRAVITY:Number = 700;
 		
 		public function Entity(w:int, h:int) {
             super();
@@ -87,7 +89,7 @@ package ata
             
             var m:Matrix = new Matrix();
             m.createGradientBox(radius*2, radius*2, 0, -radius, -radius);
-            subtractiveMask.graphics.beginGradientFill(GradientType.RADIAL, [0, 0] , [0.05, 1], [255 - (255 * fuzz / radius), 255], m);
+            subtractiveMask.graphics.beginGradientFill(GradientType.RADIAL, [0, 0] , [0.25, 1], [255 - (255 * fuzz / radius), 255], m);
             subtractiveMask.graphics.drawCircle(0, 0, radius);
             subtractiveMask.graphics.endFill();
             addSubtractiveMask(world, subtractiveMask);

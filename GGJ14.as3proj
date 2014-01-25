@@ -53,6 +53,8 @@
   <libraryPaths>
     <element path="assets\testlevel.swc" />
     <element path="assets\player.swc" />
+    <element path="assets\lvl1.swc" />
+    <element path="assets\bird.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>
