@@ -34,7 +34,7 @@ package ata
             var diff:Vector2 = speed.times(dt)
 
             var checkPosition:Vector2 = new Vector2(displayObject.parent.x + position.x, displayObject.parent.y + position.y + size.y)
-            var test = displayObject.hitTestPoint(checkPosition.x, checkPosition.y + diff.y, true);
+            var test:Boolean = displayObject.hitTestPoint(checkPosition.x, checkPosition.y + diff.y, true);
 
             if (test) {
                 testPosition.x = position.x

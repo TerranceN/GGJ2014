@@ -48,7 +48,7 @@ package ata
                 playerReal.scaleX = playerImag.scaleX = 1;
             }
 
-            var hitGround = handleLevelCollision(dt, level.realityCollision)
+            var hitGround:Boolean = handleLevelCollision(dt, level.realityCollision)
 
             if (hitGround) {
                 isJumping = false;
