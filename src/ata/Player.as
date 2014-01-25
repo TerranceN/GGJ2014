@@ -35,8 +35,8 @@ package ata
             addDisplay(World.IMAGINATION, playerImag);
             
             addRadialAdditiveMask(World.REALITY, 800, 0);
-            addRadialSubtractiveMask(World.REALITY, 300, 200);
-            addRadialAdditiveMask(World.IMAGINATION, 300, 300);
+            addRadialSubtractiveMask(World.REALITY, 300, 100);
+            addRadialAdditiveMask(World.IMAGINATION, 300, 100);
         }
 
         override public function update(input:Input, dt:Number, level:Level):void {
