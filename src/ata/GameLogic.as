@@ -52,7 +52,7 @@ package ata
             level = new Level();
             addEntity(level);
             
-            player = new Player(w/2, h/2);
+            player = new Player(w/2, h/2 - 100);
             addEntity(player);
             
             var realWorld:World = new World();
