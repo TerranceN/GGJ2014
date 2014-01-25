@@ -2,6 +2,7 @@ package ata
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.geom.Point;
 	import flash.utils.getTimer;
 	/**
 	 * ...
@@ -12,6 +13,10 @@ package ata
 	{
 		//[Embed(source = "../../../assets/tilemap/tilemap.png")]
 		//private var Tiles:Class;
+		
+		private const cameraOffset:Point = new Point(400, 450);
+		private const cameraVelocity:Point = new Point(0, 0);
+		private const camera:Point = new Point(0, 0);
 		
 		public var Paused:Boolean = false;
 		public var dt:Number;
@@ -58,6 +63,40 @@ package ata
 				}
 				updateHUD();
 			}
+		}
+		
+		private function updateCamera():void
+		{
+			var cameraVelocityDelta:Point = new Point();
+			cameraVelocityDelta.x = (player.x - cameraOffset.x - camera.x) / 3;
+			cameraVelocityDelta.y = (player.y - cameraOffset.y - camera.y) / 3;
+			
+			if (cameraVelocityDelta.x * cameraVelocity.x < 0)
+			{
+				cameraVelocity.x = 0;
+			}
+			else
+			{
+				cameraVelocity.x += cameraVelocityDelta.x;
+			}
+			
+			if (cameraVelocityDelta.y * cameraVelocity.y < 0)
+			{
+				cameraVelocity.y = 0;
+			}
+			else
+			{
+				cameraVelocity.y += cameraVelocityDelta.y;
+			}
+			
+			camera.x += cameraVelocity.x * dt;
+			camera.y += cameraVelocity.y * dt;
+			
+			cameraVelocity.x *= 0.9;
+			cameraVelocity.y *= 0.9;
+			
+			this.x = -camera.x
+			this.y = -camera.y
 		}
 		
 		private function updateHUD():void 
