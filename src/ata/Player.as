@@ -1,6 +1,7 @@
 package ata
 {
     import flash.display.DisplayObject;
+    import flash.display.MovieClip;
     import flash.ui.Keyboard;
 
     /**
@@ -11,8 +12,8 @@ package ata
     {
         private var isJumping:Boolean = true;
 
-        var playerReal:DisplayObject;
-        var playerImag:DisplayObject;
+        public var playerReal:DisplayObject;
+        public var playerImag:MovieClip;
 
         public function Player(x:int, y:int) {
             super(40, 130);
@@ -20,7 +21,7 @@ package ata
             this.x = x;
             this.y = y;
 
-            playerReal = new PlayerReal();
+            playerReal = new PlayeRealWalk();
             playerImag = new PlayerImag();
             draw();
         }
@@ -60,8 +61,8 @@ package ata
             super.draw();
             playerReal.x = playerImag.x = size.x / 2;
             playerReal.y = playerImag.y = size.y;
-            //addChild(playerReal);
-            addChild(playerImag);
+            addChild(playerReal);
+            //addChild(playerImag);
         }
     }
 }
