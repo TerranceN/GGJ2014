@@ -4,6 +4,7 @@ package ata
     import flash.display.MovieClip;
     import flash.display.Sprite;
     import flash.events.Event;
+    import flash.geom.Point;
     import flash.utils.getTimer;
     /**
      * ...
@@ -29,6 +30,10 @@ package ata
         private var player:Player;
 
         private var level:Level;
+        
+        private var cameraOffset:Point = new Point(400, 450);
+        private var cameraVelocity:Point = new Point(0, 0);
+        private var camera:Point = new Point(400, 450);
 
         public function GameLogic(w:int, h:int, input:Input) 
         {
@@ -60,15 +65,18 @@ package ata
                 }
                 updateHUD();
             }
-            updateCamera();
+            
+            updateCamera(dt);
 		}
 		
-		private function updateCamera():void
+		private function updateCamera(dt:Number):void
 		{
-			var cameraVelocityDelta:Point = new Point();
-			cameraVelocityDelta.x = (player.x - cameraOffset.x - camera.x) / 3;
-			cameraVelocityDelta.y = (player.y - cameraOffset.y - camera.y) / 3;
-			
+			var cameraVelocityDelta:Point = new Point(0,0);
+			cameraVelocityDelta.x = (player.position.x - cameraOffset.x - camera.x) * 2;
+			cameraVelocityDelta.y = (player.position.y - cameraOffset.y - camera.y) * 2;
+            
+            trace(cameraVelocityDelta.x)
+            
 			if (cameraVelocityDelta.x * cameraVelocity.x < 0)
 			{
 				cameraVelocity.x = 0;
@@ -90,9 +98,9 @@ package ata
 			camera.x += cameraVelocity.x * dt;
 			camera.y += cameraVelocity.y * dt;
 			
-			cameraVelocity.x *= 0.9;
-			cameraVelocity.y *= 0.9;
-			
+			cameraVelocity.x *= 0.5;
+			cameraVelocity.y *= 0.5;
+            
 			this.x = -camera.x
 			this.y = -camera.y
 		}

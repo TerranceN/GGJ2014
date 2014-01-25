@@ -18,18 +18,18 @@ package ata
 		}
 		
 		override public function update(input:Input, dt:Number):void {
-			if (position.getY() + size.getY() < GameLogic.ground) {
-				speed.setY(300);
+			if (position.y + size.y < GameLogic.ground) {
+				speed.y = 300;
 			} else {
-				speed.setY(0);
-				position.setY(Math.min(GameLogic.ground - size.getY(), position.getY()));
+				speed.y = 0;
+				position.y = Math.min(GameLogic.ground - size.y, position.y);
 			}
-			speed.setX(0);
+			speed.x = 0;
 			if (input.isdown(Keyboard.A) || input.isdown(Keyboard.LEFT)) {
-				speed.setX(speed.getX() - 200);
+				speed.x = speed.x - 200;
 			}
 			if (input.isdown(Keyboard.D) || input.isdown(Keyboard.RIGHT)) {
-				speed.setX(speed.getX() + 200);
+				speed.x = speed.x + 200;
 			}
 			super.update(input, dt);
 		}
