@@ -27,13 +27,25 @@ package ata
             y = y + vy * dt;
         }
 
-        public function handleLevelCollision(diff:Point, displayObject:DisplayObject):Boolean {
+        public function handleLevelCollision(dt:Number, displayObject:DisplayObject):Boolean {
+            var diff:Point = new Point(vx * dt, vy * dt)
+
             var bounds = this.getRect(this.parent);
 
             var test = displayObject.hitTestPoint(bounds.x, bounds.y + bounds.height + diff.y, true);
 
             if (test) {
-                vy = 0;
+                if (vy > 0) {
+                    var move:Number = 0
+                    test = displayObject.hitTestPoint(bounds.x, bounds.y + bounds.height + move, true);
+                    while (!test) {
+                        test = displayObject.hitTestPoint(bounds.x, bounds.y + bounds.height + move, true);
+                        move += 1;
+                    }
+                    vy = move / dt;
+                } else {
+                    vy = 0
+                }
                 return true;
             }
 

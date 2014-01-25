@@ -32,12 +32,7 @@ package ata
                 vx = 0;
             }
 
-            var diff:Point = new Point(0, 0)
-
-            diff.x = vx * dt;
-            diff.y = vy * dt;
-
-            var hitGround = handleLevelCollision(diff, level.realityCollision)
+            var hitGround = handleLevelCollision(dt, level.realityCollision)
 
             if (hitGround) {
                 isJumping = false;
