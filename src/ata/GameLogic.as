@@ -21,7 +21,7 @@ package ata
         public var totaltime:Number = 0;
 
         public var overtime:Number = 0;
-        public static var T:Number = 0.02; // time between fixed update frames
+        public static var T:Number = 0.033; // time between fixed update frames
         public static var ground:int = 400;
         private var w:int;
         private var h:int;
