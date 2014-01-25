@@ -20,7 +20,6 @@ package ata
         private static const ACCEL:Number = 600;
         private static const DECEL:Number = 600;
         private static const JUMP:Number = 450;
-        private static const GRAVITY:Number = 700;
         
         public function Player(x:int, y:int) {
             super(40*IMG_SCALE, 130*IMG_SCALE);
@@ -29,7 +28,7 @@ package ata
             this.y = y;
 
             playerReal = new PlayeRealWalk();
-            playerImag = new PlayerImag();
+            playerImag = new PlayeRealWalk();
             playerReal.scaleY = playerImag.scaleY = playerReal.scaleX = playerImag.scaleX = IMG_SCALE;
             
             // for now, show player as always real to show walk animation

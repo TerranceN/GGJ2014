@@ -25,7 +25,9 @@ package ata
         public var additiveMasks:Object = {};
         
         //MAP STRING -> DISPLAY OBJECT
-        public var subtractiveMasks:Object = {};
+        public var subtractiveMasks:Object = { };
+        
+        public static const GRAVITY:Number = 700;
 		
 		public function Entity(w:int, h:int) {
             super();
