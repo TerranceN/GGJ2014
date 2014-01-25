@@ -8,17 +8,26 @@ package ata
 	 */
 	public class Entity extends Sprite
 	{
-		private var w:int;
-		private var h:int;
+		public var w:int;
+		public var h:int;
+		public var vx:Number;
+		public var vy:Number;
 		
 		public function Entity(w:int, h:int) {
 			this.w = w;
 			this.h = h;
+			vx = 0;
+			vy = 0;
+		}
+		
+		public function update(input:Input, dt:Number):void {
+			x = x + vx * dt;
+			y = y + vy * dt;
 		}
 		
 		public function draw():void {
-			graphics.lineStyle(1, 1);
-			graphics.drawCircle(0, 0, 10);
+			graphics.lineStyle(1, 0x000000);
+			graphics.drawRect(0 ,0 , w, h);
 		}
 	}
 	
