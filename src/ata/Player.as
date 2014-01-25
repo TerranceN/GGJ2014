@@ -1,5 +1,6 @@
 package ata
 {
+	import flash.ui.Keyboard;
 	
 	/**
 	 * ...
@@ -11,23 +12,24 @@ package ata
 		public function Player(x:int, y:int) {
 			super(30, 50);
 			draw();
+			this.position = new Vector2(x, y);
 			this.x = x;
 			this.y = y;
 		}
 		
 		override public function update(input:Input, dt:Number):void {
-			if (y + h < GameLogic.ground) {
-				vy = 300;
+			if (position.getY() + size.getY() < GameLogic.ground) {
+				speed.setY(300);
 			} else {
-				vy = 0;
-				y = Math.min(GameLogic.ground - h, y);
+				speed.setY(0);
+				position.setY(Math.min(GameLogic.ground - size.getY(), position.getY()));
 			}
-			if (input.isdown("A")) {
-				vx = - 200;
-			} else if (input.isdown("D")) {
-				vx = 200;
-			} else {
-				vx = 0;
+			speed.setX(0);
+			if (input.isdown(Keyboard.A) || input.isdown(Keyboard.LEFT)) {
+				speed.setX(speed.getX() - 200);
+			}
+			if (input.isdown(Keyboard.D) || input.isdown(Keyboard.RIGHT)) {
+				speed.setX(speed.getX() + 200);
 			}
 			super.update(input, dt);
 		}

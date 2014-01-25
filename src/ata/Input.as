@@ -5,13 +5,14 @@
 	import flash.ui.Keyboard;
 	import flash.events.MouseEvent;
 	import flash.events.Event;
+	import flash.utils.Dictionary;
 	/**
 	 * ...
 	 * @author Matthew Hyndman
 	 */
 	public class Input 
 	{
-		public var keys:Object = new Object();
+		public var keys:Dictionary = new Dictionary();
 		
 		private static const pressed:uint = 0;
 		private static const released:uint = 1;
@@ -24,6 +25,7 @@
 		public var dmy:Number;
 		
 		public var dt:Number;
+		public static var MOUSE_KEY:uint = 0;
 		
 		public function Input(stage:Stage):void {
 			this.stage = stage;
@@ -70,19 +72,16 @@
 		}
 		private function keydown(e:KeyboardEvent):void {
 			var key:String = keyfromcode(e.keyCode);
-			if (! isdown(key)) keys[key] = pressed;
+			if (! isdown(e.keyCode)) keys[e.keyCode] = pressed;
 		}
 		private function keyup(e:KeyboardEvent):void {
-			var key:String = keyfromcode(e.keyCode);
-			if (isdown(key)) keys[key] = released;
+			if (isdown(e.keyCode)) keys[e.keyCode] = released;
 		}
 		private function mousedown(e:MouseEvent):void {
-			var key:String = "MOUSE";
-			if (! isdown(key)) keys[key] = pressed;
+			if (isdown(MOUSE_KEY)) keys[MOUSE_KEY] = pressed;
 		}
 		private function mouseup(e:MouseEvent):void {
-			var key:String = "MOUSE";
-			if (isdown(key)) keys[key] = released;
+			if (isdown(MOUSE_KEY)) keys[MOUSE_KEY] = released;
 		}
 		public function update(newdt:Number):void {
 			dt = newdt;
@@ -102,18 +101,18 @@
 			}
 		}
 		
-		public function isdown(key:String):Boolean {
+		public function isdown(key:uint):Boolean {
 			return keys[key] == down || keys[key] == pressed;
 		}
-		public function justpressed(key:String):Boolean {
+		public function justpressed(key:uint):Boolean {
 			return keys[key] == pressed;
 		}
-		public function justreleased(key:String):Boolean {
+		public function justreleased(key:uint):Boolean {
 			return keys[key] == released;
 		}
 		
 		//call after a justpressed result
-		public function presshandled(key:String):void {
+		public function presshandled(key:uint):void {
 			keys[key] = down;
 		}
 	}
