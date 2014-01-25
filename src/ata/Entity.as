@@ -1,6 +1,7 @@
 package ata
 {
     import flash.display.DisplayObject;
+    import flash.display.BlendMode;
     import flash.display.GradientType;
 	import flash.display.Sprite;
     import flash.geom.Matrix;
@@ -60,35 +61,38 @@ package ata
             {
                 subtractiveMasks[world] = new Vector.<DisplayObject>();
             }
+            obj.blendMode = BlendMode.ALPHA;
             subtractiveMasks[world].push(obj);
         }
         
-        public function addRadialAdditiveMask(world:String, radius:Number, fuzz:Number=50):void
+        public function addRadialAdditiveMask(world:String, radius:Number, fuzz:Number=100):void
         {
             var additiveMask:Sprite = new Sprite();
             var subtractiveMask:Sprite = new Sprite();
             
+            trace(this.size.y)
+            
             var m:Matrix = new Matrix();
-            m.createGradientBox(radius*2, radius*2, 0, -radius, -radius);
-            subtractiveMask.graphics.beginGradientFill(GradientType.RADIAL, [0, 0] , [1, 0.05], [255 - (255 * fuzz / radius), 255], m);
-            subtractiveMask.graphics.drawCircle(0, 0, radius);
+            m.createGradientBox(radius*2, radius*2, 0, -radius - this.size.x/2, -radius -this.size.y/2);
+            subtractiveMask.graphics.beginGradientFill(GradientType.RADIAL, [0, 0] , [1, 0], [255 - (255 * fuzz / radius), 255], m);
+            subtractiveMask.graphics.drawCircle(-this.size.x/2, -this.size.y/2, radius);
             subtractiveMask.graphics.endFill();
-            //addSubtractiveMask(world, subtractiveMask);
+            addSubtractiveMask(world, subtractiveMask);
             
             additiveMask.graphics.beginFill(0x000000);
-            additiveMask.graphics.drawCircle(0, 0, radius);
+            additiveMask.graphics.drawCircle(-this.size.x/2, -this.size.y/2, radius);
             additiveMask.graphics.endFill();
             addAdditiveMask(world, additiveMask);
         }
         
-        public function addRadialSubtractiveMask(world:String, radius:Number, fuzz:Number=50):void
+        public function addRadialSubtractiveMask(world:String, radius:Number, fuzz:Number=100):void
         {
             var subtractiveMask:Sprite = new Sprite();
             
             var m:Matrix = new Matrix();
-            m.createGradientBox(radius*2, radius*2, 0, -radius, -radius);
-            subtractiveMask.graphics.beginGradientFill(GradientType.RADIAL, [0, 0] , [0.05, 1], [255 - (255 * fuzz / radius), 255], m);
-            subtractiveMask.graphics.drawCircle(0, 0, radius);
+            m.createGradientBox(radius*2, radius*2, 0, -radius-this.size.x/2, -radius-this.size.y/2);
+            subtractiveMask.graphics.beginGradientFill(GradientType.RADIAL, [0, 0] , [0, 1], [255 - (255 * fuzz / radius), 254], m);
+            subtractiveMask.graphics.drawCircle(-this.size.x/2, -this.size.y/2, radius);
             subtractiveMask.graphics.endFill();
             addSubtractiveMask(world, subtractiveMask);
         }

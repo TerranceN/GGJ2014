@@ -19,16 +19,16 @@ package ata
         
         public function World() 
         {
-            display = new Sprite();
-            addChild(display);
-            additiveMask = new Sprite();
-            addChild(additiveMask);
             subtractiveMask = new Sprite();
             addChild(subtractiveMask);
+            display = new Sprite();
+            subtractiveMask.addChild(display);
+            additiveMask = new Sprite();
+            //subtractiveMask.addChild(additiveMask);
             
-            this.blendMode = BlendMode.LAYER;
-            display.mask = additiveMask;
-            subtractiveMask.blendMode = BlendMode.ALPHA;
+            //this.blendMode = BlendMode.LAYER;
+            //display.mask = additiveMask;
+            subtractiveMask.blendMode = BlendMode.LAYER;
         }
         
     }
