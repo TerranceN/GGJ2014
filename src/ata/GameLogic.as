@@ -1,5 +1,6 @@
 package ata 
 {
+    import flash.display.BlendMode;
     import flash.display.DisplayObject;
     import flash.display.MovieClip;
     import flash.display.Sprite;
@@ -184,6 +185,7 @@ package ata
                 for each (displayObject in displayObjects)
                 {
                     world.subtractiveMask.addChild(displayObject);
+                    displayObject.blendMode = BlendMode.ALPHA;
                 }
             }
         }
