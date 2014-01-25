@@ -8,8 +8,8 @@ package ata
 	 */
 	public class Vector2
 	{
-		private var x:Number;
-		private var y:Number;
+		public var x:Number;
+		public var y:Number;
 		
 		public function Vector2(x: Number, y:Number) {
 			this.x = x;

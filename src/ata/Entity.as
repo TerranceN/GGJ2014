@@ -25,7 +25,7 @@ package ata
 		}
 		
 		public function draw():void {
-			graphics.lineStyle(2, 0x000000);
+			graphics.lineStyle(1, 0x000000, 0.5);
 			graphics.drawRect(0 ,0 , size.getX(), size.getY());
 		}
 	}
