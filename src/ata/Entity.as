@@ -20,13 +20,13 @@ package ata
 		
 		public function update(input:Input, dt:Number):void {
 			position = position.add(speed.times(dt));
-			x = position.getX();
-			y = position.getY();
+			x = position.x;
+			y = position.y;
 		}
 		
 		public function draw():void {
-			graphics.lineStyle(2, 0x000000);
-			graphics.drawRect(0 ,0 , size.getX(), size.getY());
+			graphics.lineStyle(1, 0x000000, 0.5);
+			graphics.drawRect(0 ,0 , size.x, size.y);
 		}
 	}
 	
