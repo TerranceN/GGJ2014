@@ -65,17 +65,17 @@ package ata
                 }
                 updateHUD();
             }
-            
-            updateCamera(dt);
 		}
 		
 		private function updateCamera(dt:Number):void
 		{
-			var cameraVelocityDelta:Point = new Point(0,0);
-			cameraVelocityDelta.x = (player.position.x - cameraOffset.x - camera.x) * 2;
-			cameraVelocityDelta.y = (player.position.y - cameraOffset.y - camera.y) * 2;
+			camera.x += cameraVelocity.x * dt;
+			camera.y += cameraVelocity.y * dt;
             
-            trace(cameraVelocityDelta.x)
+			var cameraVelocityDelta:Point = new Point(0,0);
+			var nextCameraVelocityDelta:Point = new Point(0,0);
+			cameraVelocityDelta.x = (player.position.x - cameraOffset.x - camera.x) * 4;
+			cameraVelocityDelta.y = (player.position.y - cameraOffset.y - camera.y) * 4;
             
 			if (cameraVelocityDelta.x * cameraVelocity.x < 0)
 			{
@@ -83,7 +83,8 @@ package ata
 			}
 			else
 			{
-				cameraVelocity.x += cameraVelocityDelta.x;
+                cameraVelocity.x += cameraVelocityDelta.x;
+                cameraVelocity.x *= 0.5;
 			}
 			
 			if (cameraVelocityDelta.y * cameraVelocity.y < 0)
@@ -92,14 +93,9 @@ package ata
 			}
 			else
 			{
-				cameraVelocity.y += cameraVelocityDelta.y;
+                cameraVelocity.y += cameraVelocityDelta.y;
+                cameraVelocity.y *= 0.5;
 			}
-			
-			camera.x += cameraVelocity.x * dt;
-			camera.y += cameraVelocity.y * dt;
-			
-			cameraVelocity.x *= 0.5;
-			cameraVelocity.y *= 0.5;
             
 			this.x = -camera.x
 			this.y = -camera.y
@@ -112,6 +108,8 @@ package ata
         public function fixedupdate(dt:Number):void //dt is 1/50th of a second
         {
             player.update(input, dt);
+            
+            updateCamera(dt);
         }
 
         public function stoplistening():void
