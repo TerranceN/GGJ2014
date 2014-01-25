@@ -32,10 +32,6 @@ package ata
 			level.y = 500;
 			addChild(level)
 			
-			
-			var player:Player;
-			player = new Player(100, 100);
-			addChild(player);			
 			input = new Input(stage);
 			addChild(new GameLogic(stage.stageWidth, stage.stageHeight, input));
 		}
