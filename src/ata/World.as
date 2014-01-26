@@ -32,7 +32,8 @@ package ata
 
         [Embed(source="../../assets/mask.png")]
 		private var Mask:Class;
-        private var maskInstance:Mask;
+        
+        private var maskInstance:DisplayObject;
 
         private var oldBitmap:Bitmap = null
         private var oldBitmapInverse:Bitmap = null
@@ -54,7 +55,7 @@ package ata
             this.cacheAsBitmap = true
         }
 
-        public function clearBubbles() {
+        public function clearBubbles():void {
             additiveBubbles = new Array()
             subtractiveBubbles = new Array()
 
@@ -91,10 +92,12 @@ package ata
         
         public function generateMasks():void {
             maskData.fillRect(maskData.rect, 0x00FFFFFF);
-
-            for each (var bubble:EffectBubble in additiveBubbles) {
-                var matrix:Matrix = new Matrix()
-                var scale = bubble.scale * 2 / BUBBLE_RADIUS
+            var bubble:EffectBubble
+            var matrix:Matrix
+            var scale:Number
+            for each (bubble in additiveBubbles) {
+                matrix = new Matrix()
+                scale = bubble.scale * 2 / BUBBLE_RADIUS
                 matrix.scale(scale, scale)
                 matrix.translate(
                     bubble.entity.position.x - GameLogic.camera.x - maskInstance.width * scale / 2,
@@ -104,9 +107,9 @@ package ata
                 maskData.draw(maskInstance, matrix, null, null, null, false)
             }
 
-            for each (var bubble:EffectBubble in subtractiveBubbles) {
-                var matrix:Matrix = new Matrix()
-                var scale = bubble.scale * 2 / BUBBLE_RADIUS
+            for each (bubble in subtractiveBubbles) {
+                matrix = new Matrix()
+                scale = bubble.scale * 2 / BUBBLE_RADIUS
                 matrix.scale(scale, scale)
                 matrix.translate(
                     bubble.entity.position.x - GameLogic.camera.x - maskInstance.width * scale / 2,
@@ -127,7 +130,7 @@ package ata
             inverseMaskBitmap.y = GameLogic.camera.y
         }
 
-        public function generateInverseMask() {
+        public function generateInverseMask():Bitmap {
             if (oldBitmapInverse != null && oldBitmapInverse.parent != null) {
                 oldBitmapInverse.parent.removeChild(oldBitmapInverse)
             }
@@ -138,7 +141,7 @@ package ata
                 maskData.fillRect(maskData.rect, 0);
             }
 
-            var bitmap = new Bitmap(maskData)
+            var bitmap:Bitmap = new Bitmap(maskData)
             oldBitmapInverse = bitmap
             bitmap.cacheAsBitmap = true
             return bitmap
