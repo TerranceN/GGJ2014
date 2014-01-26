@@ -197,32 +197,32 @@ package ata
                 var filteredDiff:Vector2 = new Vector2()
 
                 if (key == "bottom_middle") {
-                    if (diff.y > 0) {
+                    if (diff.y >= 0) {
                         filteredDiff = new Vector2(0, diff.y)
                     } else {
-                        filteredDiff = new Vector2()
+                        filteredDiff = null
                     }
                 } else if (key == "right") {
-                    if (diff.x > 0) {
+                    if (diff.x >= 0) {
                         filteredDiff = new Vector2(diff.x, 0)
                     } else {
-                        filteredDiff = new Vector2()
+                        filteredDiff = null
                     }
                 } else if (key == "left") {
-                    if (diff.x < 0) {
+                    if (diff.x <= 0) {
                         filteredDiff = new Vector2(diff.x, 0)
                     } else {
-                        filteredDiff = new Vector2()
+                        filteredDiff = null
                     }
                 } else if (key == "top_middle") {
-                    if (diff.y < 0) {
+                    if (diff.y <= 0) {
                         filteredDiff = new Vector2(0, diff.y)
                     } else {
-                        filteredDiff = new Vector2()
+                        filteredDiff = null
                     }
                 }
 
-                if (filteredDiff.lengthSquared() > 0) {
+                if (filteredDiff != null) {
                     for each (var testPoint:Vector2 in pointList) {
                         // if hitting at current location
                             // find point where not hitting
