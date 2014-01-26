@@ -73,7 +73,7 @@ package ata
                 bubble = new EffectBubble(entity, scale)
             }
             additiveBubbles.push(bubble)
-            entity.addInfluence(World.IMAGINATION, bubble.scale)
+            entity.addInfluence(World.IMAGINATION, bubble.scale * 2)
             return bubble
         }
 
@@ -85,7 +85,7 @@ package ata
                 bubble = new EffectBubble(entity, scale)
             }
             subtractiveBubbles.push(bubble)
-            entity.addInfluence(World.REALITY, bubble.scale)
+            entity.addInfluence(World.REALITY, bubble.scale * 2)
             return bubble
         }
         

@@ -13,7 +13,7 @@ package ata
 			
             addDisplay(World.REALITY, new parent_reality());
 
-            GameLogic.worldMap[World.IMAGINATION].addSubtractiveBubble(this, 100);
+            GameLogic.worldMap[World.IMAGINATION].addSubtractiveBubble(this, 50);
         }
         
     }
