@@ -14,6 +14,7 @@ package ata
 
         public var playerReal:MovieClip;
         public var playerImag:MovieClip;
+        public var bubble:EffectBubble = null;
         private static const IMG_SCALE:Number = 0.7;
 
         private static const MAX_SPEED_REAL:Number = 150;
@@ -50,8 +51,8 @@ package ata
             // for now, show player as always real to show walk animation
             addDisplay(World.REALITY, playerReal);
             addDisplay(World.IMAGINATION, playerImag);
-            
-            addRadialAdditiveMask(World.IMAGINATION, 900, false, 150);
+
+            bubble = GameLogic.worldMap[World.IMAGINATION].addAdditiveBubble(this, 500);
         }
 
         override public function update(input:Input, dt:Number, level:Level):void {

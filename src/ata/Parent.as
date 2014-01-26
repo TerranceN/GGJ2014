@@ -12,8 +12,8 @@ package ata
             super(0, 170);
 			
             addDisplay(World.REALITY, new parent_reality());
-            addRadialAdditiveMask(World.REALITY, 140);
-            addRadialSubtractiveMask(World.IMAGINATION, 235);
+
+            GameLogic.worldMap[World.IMAGINATION].addSubtractiveBubble(this, 100);
         }
         
     }
