@@ -146,15 +146,11 @@ package ata
             return dict;
         }
 
-        public function handleLevelCollision(dt:Number, displayObject:DisplayObject):Boolean {
-            var result:Boolean = false;
-            var diff:Vector2 = speed.times(dt)
-
+        public function mainCollisionPoints():Array {
             var minWallWidth:Number = 20
             var wallPointStartHeight:Number = 20
 
-            // this needs to be an array so we can define the order they are processed in
-            var testPoints:Array = new Array(
+            return new Array(
                 makeTypePointPair(
                     "bottom_middle",
                     new Array(new Vector2(0, 0))
@@ -180,8 +176,22 @@ package ata
                     new Array(new Vector2(0, -size.y))
                 )
             )
+        }
 
-            for each (var dict:Dictionary in testPoints) {
+        public function platformCollisionPoints():Array {
+            return new Array(
+                makeTypePointPair(
+                    "bottom_middle",
+                    new Array(new Vector2(0, 0))
+                )
+            )
+        }
+
+        public function handleLevelCollision(dt:Number, displayObject:DisplayObject, collisionPoints:Array):Boolean {
+            var result:Boolean = false;
+            var diff:Vector2 = speed.times(dt)
+
+            for each (var dict:Dictionary in collisionPoints) {
                 var key:String = dict["type"]
                 var pointList:Array = dict["points"];
                 var filteredDiff:Vector2 = new Vector2()
@@ -212,49 +222,52 @@ package ata
                     }
                 }
 
-                for each (var testPoint:Vector2 in pointList) {
-                    // if hitting at current location
-                        // find point where not hitting
-                        // binary search for contact point
-                        // set appropriate velocity to 0
-                    // if about to hit
-                        // find point where not hitting
-                        // binary search for contact point
-                        // set appropriate velocity to 0
+                if (filteredDiff.lengthSquared() > 0) {
+                    for each (var testPoint:Vector2 in pointList) {
+                        // if hitting at current location
+                            // find point where not hitting
+                            // binary search for contact point
+                            // set appropriate velocity to 0
+                        // if about to hit
+                            // find point where not hitting
+                            // binary search for contact point
+                            // set appropriate velocity to 0
 
-                    var parentPosition:Vector2 = new Vector2(-GameLogic.camera.x, -GameLogic.camera.y);
-                    var currentPosition:Vector2 = parentPosition.add(position.add(testPoint));
-                    var test:Boolean = displayObject.hitTestPoint(currentPosition.x, currentPosition.y, true);
+                        var parentPosition:Vector2 = new Vector2(-GameLogic.camera.x, -GameLogic.camera.y);
+                        var currentPosition:Vector2 = parentPosition.add(position.add(testPoint));
+                        var test:Boolean = displayObject.hitTestPoint(currentPosition.x, currentPosition.y, true);
 
-                    if (test) {
-                        var movement:Vector2 = new Vector2()
-                        var move:Vector2 = new Vector2()
+                        if (test) {
+                            var movement:Vector2 = new Vector2()
+                            var move:Vector2 = new Vector2()
 
-                        if (key == "bottom_middle") {
-                            move = new Vector2(0, -10);
-                            speed.y = 0
-                            result = true;
-                        } else if (key == "right") {
-                            move = new Vector2(-10, 0)
-                            speed.x = 0;
-                        } else if (key == "left") {
-                            move = new Vector2(10, 0)
-                            speed.x = 0;
-                        } else if (key == "top_middle") {
-                            move = new Vector2(0, 10)
-                            speed.y = 0
+                            if (key == "bottom_middle") {
+                                move = new Vector2(0, -10);
+                                speed.y = 0
+                                result = true;
+                            } else if (key == "right") {
+                                move = new Vector2(-10, 0)
+                                speed.x = 0;
+                            } else if (key == "left") {
+                                move = new Vector2(10, 0)
+                                speed.x = 0;
+                            } else if (key == "top_middle") {
+                                move = new Vector2(0, 10)
+                                speed.y = 0
+                            }
+
+                            while (test) {
+                                test = displayObject.hitTestPoint(currentPosition.x + movement.x, currentPosition.y + movement.y, true);
+                                movement = movement.add(move)
+                            }
+
+                            var contact:Vector2 = findContactPoint(displayObject, currentPosition, currentPosition.add(move))
+                            position = contact.add(parentPosition.add(testPoint).times(-1))
+                            x = position.x
+                            y = position.y
+                        } else {
+                        
                         }
-
-                        while (test) {
-                            test = displayObject.hitTestPoint(currentPosition.x + movement.x, currentPosition.y + movement.y, true);
-                            movement = movement.add(move)
-                        }
-
-                        var contact:Vector2 = findContactPoint(displayObject, currentPosition, currentPosition.add(move))
-                        position = contact.add(parentPosition.add(testPoint).times(-1))
-                        x = position.x
-                        y = position.y
-                    } else {
                     }
                 }
             }
