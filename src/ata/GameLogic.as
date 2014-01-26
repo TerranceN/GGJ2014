@@ -189,7 +189,7 @@ package ata
                 entity.update(input, dt, level);
                 
                 var worldString:String;
-                for (worldString in World.TYPES)
+                for each (worldString in World.TYPES)
                 {
                     entity.influencedBy[worldString] = false;
                 }
