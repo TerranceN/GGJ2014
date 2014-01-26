@@ -190,9 +190,14 @@ package ata
                 cameraVelocity.y *= 0.5;
             }
 
-            if (cameraVelocityDelta.length() < 100) {
-                cameraVelocity = new Vector2()
-                cameraVelocityDelta = new Vector2()
+            if (Math.abs(cameraVelocityDelta.x) < 100) {
+                cameraVelocity.x = 0
+                cameraVelocityDelta.x = 0
+            }
+
+            if (Math.abs(cameraVelocityDelta.y) < 100) {
+                cameraVelocity.y = 0
+                cameraVelocityDelta.y = 0
             }
 
             this.x = -camera.x
