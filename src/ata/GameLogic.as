@@ -34,8 +34,7 @@ package ata
         
         private var entities:Vector.<Entity> = new Vector.<Entity>();
         
-        private var worldMap:Object = {};
-        
+        private static var worldMap:Object = {};
 
         private var cameraOffset:Point = new Point(400, 300);
         private var cameraVelocity:Point = new Point(0, 0);
@@ -48,20 +47,32 @@ package ata
             this.input = input;
 
             addEventListener(Event.ENTER_FRAME, update);
-
-            level = new Level();
-            addEntity(level);
             
-            player = new Player(w/2, h/2);
-            addEntity(player);
+            var imgWorld:World = new World();
+            worldMap[World.IMAGINATION] = imgWorld;
+            addChild(imgWorld);
             
             var realWorld:World = new World();
             worldMap[World.REALITY] = realWorld;
             addChild(realWorld);
             
-            var imgWorld:World = new World();
-            worldMap[World.IMAGINATION] = imgWorld;
-            addChild(imgWorld);
+            //realWorld.fadeTo(0.8);
+
+            level = new Level();
+            addEntity(level);
+            
+            player = new Player(w/2, 0);
+            addEntity(player);
+            
+            var parent:Parent = new Parent();
+            parent.position.x = 800;
+            addEntity(parent);
+            parent = new Parent();
+            parent.position.x = 1000;
+            addEntity(parent);
+            parent = new Parent();
+            parent.position.x = 1200;
+            addEntity(parent);
         }
 
         public function update(dt:Number):void {
@@ -122,8 +133,42 @@ package ata
 
         public function fixedupdate(dt:Number):void //dt is 1/50th of a second
         {
-            level.update(input, dt, level);
-            player.update(input, dt, level);
+            for each (var entity:Entity in entities)
+            {
+                entity.update(input, dt, level);
+                
+                var worldString:String;
+                for (worldString in entity.influencedBy)
+                {
+                    entity.influencedBy[worldString] = false;
+                }
+                
+                for each (var otherEntity:Entity in entities)
+                {
+                    if (entity != otherEntity)
+                    {
+                        for (worldString in otherEntity.influences)
+                        {
+                            if (entity.position.diff(otherEntity.position) < otherEntity.influences[worldString])
+                            {
+                                entity.influencedBy[worldString] = true;
+                            }
+                        }
+                    }
+                }
+            }
+            if (player.influencedBy[World.REALITY])
+            {
+                worldMap[World.REALITY].scaleAdditiveInfluence(4);
+                worldMap[World.REALITY].scaleSubtractiveInfluence(4);
+                worldMap[World.REALITY].fadeTo(1);
+            }
+            else
+            {
+                worldMap[World.REALITY].scaleAdditiveInfluence(1);
+                worldMap[World.REALITY].scaleSubtractiveInfluence(1);
+                worldMap[World.REALITY].fadeTo(0.8);
+            }
             updateCamera(dt);
         }
         
@@ -174,7 +219,6 @@ package ata
                 for each (displayObject in displayObjects)
                 {
                     world.subtractiveMask.addChild(displayObject);
-                    displayObject.blendMode = BlendMode.ALPHA;
                 }
             }
         }

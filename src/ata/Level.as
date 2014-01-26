@@ -17,7 +17,6 @@ package ata
 		{
             super(0, 0);
 			reality = new level1_reality();
-            position.y = 300;
 			addDisplay(World.REALITY, reality);
 			
 			realityPlatforms = new level1_reality_platforms();
@@ -29,7 +28,6 @@ package ata
 			addDisplay(World.REALITY, realityCollision);
             
 			imagination = new level_1_imagination();
-            position.y = 300;
 			addDisplay(World.IMAGINATION, imagination);
 		}
 	}
