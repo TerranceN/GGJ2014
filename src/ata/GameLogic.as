@@ -50,9 +50,9 @@ package ata
         
         public static var worldMap:Object = {};
 
-        private var cameraOffset:Point = new Point(400, 300);
-        private var cameraVelocity:Point = new Point(0, 0);
-        public static var camera:Point = new Point(0, 0);
+        private var cameraOffset:Vector2 = new Vector2(400, 300);
+        private var cameraVelocity:Vector2 = new Vector2(0, 0);
+        public static var camera:Vector2 = new Vector2(0, 0);
         
         public static var instance:GameLogic;
 
@@ -150,8 +150,8 @@ package ata
             camera.y += cameraVelocity.y * dt;
             camera.x = Math.max(level.x1, Math.min(camera.x,level.x2));
 
-            var cameraVelocityDelta:Point = new Point(0,0);
-            var nextCameraVelocityDelta:Point = new Point(0,0);
+            var cameraVelocityDelta:Vector2 = new Vector2(0,0);
+            var nextCameraVelocityDelta:Vector2 = new Vector2(0,0);
             cameraVelocityDelta.x = (player.position.x - cameraOffset.x - camera.x) * 4;
             cameraVelocityDelta.y = (player.position.y - cameraOffset.y - camera.y) * 4;
 
@@ -173,6 +173,11 @@ package ata
             {
                 cameraVelocity.y += cameraVelocityDelta.y;
                 cameraVelocity.y *= 0.5;
+            }
+
+            if (cameraVelocityDelta.length() < 100) {
+                cameraVelocity = new Vector2()
+                cameraVelocityDelta = new Vector2()
             }
 
             this.x = -camera.x

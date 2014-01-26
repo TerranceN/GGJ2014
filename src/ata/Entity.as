@@ -239,7 +239,7 @@ package ata
                                         speed.y = 0
                                     }
 
-                                    contact = findContactPoint(displayObject, currentPosition, points[i])
+                                    contact = findContactPoint(displayObject, points[i], currentPosition)
                                     position = contact.add(parentPosition.add(testPoint).times(-1))
                                     x = position.x
                                     y = position.y
