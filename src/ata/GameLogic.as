@@ -146,6 +146,17 @@ package ata
                 }
                 draw();
             }
+            
+            for each(var effect:Effect in effects)
+            {
+                effect.timeLeft --;
+                if (effect.timeLeft <= 0)
+                {
+                    trace("remove");
+                    //removeEntity(effect);
+                    //effects.splice(effects.indexOf(effect), 1);
+                }
+            }
         }
 
         private function updateCamera(dt:Number):void
@@ -219,6 +230,7 @@ package ata
                     }
                 }
             }
+            
             if (player.influencedBy[World.REALITY])
             {
                 player.bubble.scaleModifier -= player.bubble.scaleModifier / 5
@@ -232,6 +244,12 @@ package ata
                         removeEntity(starEntity);
                         stars.splice(stars.indexOf(starEntity), 1);
                         numStars++;
+                        
+                        var explode:Effect = new Effect(new explosion(), 16);
+                        explode.position.x = starEntity.position.x;
+                        explode.position.y = starEntity.position.y;
+                        effects.push(explode);
+                        addEntity(explode);
                     }
                 }
                 player.bubble.scaleModifier += (1 - player.bubble.scaleModifier) / 5
