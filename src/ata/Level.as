@@ -26,7 +26,7 @@ package ata
             trace(x1, x2);
             
             super(0, 0);
-            position.y = 300;
+            position.y = 0;
 
             reality = real;
 			addDisplay(World.REALITY, real);

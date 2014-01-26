@@ -35,9 +35,8 @@ package ata
             addDisplay(World.REALITY, playerReal);
             addDisplay(World.IMAGINATION, playerImag);
             
-            addRadialAdditiveMask(World.REALITY, 800, 0);
-            addRadialSubtractiveMask(World.REALITY, 300, 100);
-            addRadialAdditiveMask(World.IMAGINATION, 300, 100);
+            //addRadialSubtractiveMask(World.REALITY, 300, 100);
+            addRadialAdditiveMask(World.IMAGINATION, 900, false, 50);
         }
 
         override public function update(input:Input, dt:Number, level:Level):void {
@@ -72,6 +71,12 @@ package ata
             }
 
             super.update(input, dt, level);
+            
+            if (position.x < level.x1) {
+                GameLogic.instance.setLevel(GameLogic.instance.levelNum - 1);
+            } else if (position.x > level.x2) {
+                GameLogic.instance.setLevel(GameLogic.instance.levelNum + 1);
+            }
         }
     }
 }

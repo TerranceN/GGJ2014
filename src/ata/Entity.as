@@ -28,6 +28,9 @@ package ata
         //MAP STRING -> DISPLAY OBJECT
         public var subtractiveMasks:Object = { };
         
+        public var influences:Object = { };
+        
+        public var influencedBy:Object = { };
         public static const GRAVITY:Number = 700;
 		
 		public function Entity(w:int, h:int) {
@@ -65,28 +68,39 @@ package ata
             {
                 subtractiveMasks[world] = new Vector.<DisplayObject>();
             }
-            obj.blendMode = BlendMode.ALPHA;
             subtractiveMasks[world].push(obj);
         }
         
-        public function addRadialAdditiveMask(world:String, radius:Number, fuzz:Number=100):void
+        public function addInfluence(world:String, influence:Number):void
+        {
+            if (influences[world] == undefined)
+            {
+                influences[world] = new Vector.<DisplayObject>();
+            }
+            influences[world] = influence;
+        }
+        
+        public function addRadialAdditiveMask(world:String, radius:Number, gradient:Boolean=true, fuzz:Number=100):void
         {
             var additiveMask:Sprite = new Sprite();
-            var subtractiveMask:Sprite = new Sprite();
             
-            trace(this.size.y)
+            if ( gradient)
+            {
+                var subtractiveMask:Sprite = new Sprite();
             
-            var m:Matrix = new Matrix();
-            m.createGradientBox(radius*2, radius*2, 0, -radius - this.size.x/2, -radius -this.size.y/2);
-            subtractiveMask.graphics.beginGradientFill(GradientType.RADIAL, [0, 0] , [1, 0], [255 - (255 * fuzz / radius), 255], m);
-            subtractiveMask.graphics.drawCircle(-this.size.x/2, -this.size.y/2, radius);
-            subtractiveMask.graphics.endFill();
-            addSubtractiveMask(world, subtractiveMask);
+                var m:Matrix = new Matrix();
+                m.createGradientBox(radius*2, radius*2, 0, -radius - this.size.x/2, -radius -this.size.y/2);
+                subtractiveMask.graphics.beginGradientFill(GradientType.RADIAL, [0, 0] , [1, 0], [255 - (255 * fuzz / radius), 255], m);
+                subtractiveMask.graphics.drawCircle(-this.size.x/2, -this.size.y/2, radius);
+                subtractiveMask.graphics.endFill();
+                addSubtractiveMask(world, subtractiveMask);
+            }
             
             additiveMask.graphics.beginFill(0x000000);
             additiveMask.graphics.drawCircle(-this.size.x/2, -this.size.y/2, radius);
             additiveMask.graphics.endFill();
             addAdditiveMask(world, additiveMask);
+            addInfluence(world, radius);
         }
         
         public function addRadialSubtractiveMask(world:String, radius:Number, fuzz:Number=100):void
