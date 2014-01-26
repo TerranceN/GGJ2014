@@ -5,6 +5,7 @@ package ata
     import flash.display.GradientType;
 	import flash.display.Sprite;
     import flash.geom.Matrix;
+    import flash.utils.Dictionary;
 	
 	/**
 	 * ...
@@ -16,6 +17,7 @@ package ata
 		public var speed:Vector2;
 		public var position:Vector2;
         public var testPosition:Sprite;
+        public static const MIN_WALL_WIDTH:Number = 20
         
         //MAP STRING -> DISPLAY OBJECT
         public var displayObjects:Object = {};
@@ -29,6 +31,7 @@ package ata
         public var influences:Object = { };
         
         public var influencedBy:Object = { };
+        public static const GRAVITY:Number = 700;
 		
 		public function Entity(w:int, h:int) {
             super();
@@ -112,30 +115,203 @@ package ata
             addSubtractiveMask(world, subtractiveMask);
         }
         
-        public function handleLevelCollision(dt:Number, displayObject:DisplayObject):Boolean {
-            var diff:Vector2 = speed.times(dt)
+        public function getPointsInRange(start:Vector2, end:Vector2, step:Number):Array {
+            var diff:Vector2 = end.add(start.times(-1));
+            var segment:Vector2 = diff.normalize()
+            var length:Number = diff.length()
+            var output:Array = new Array();
 
-            var checkPosition:Vector2 = new Vector2(-GameLogic.camera.x + position.x, -GameLogic.camera.y + position.y )
-            var test:Boolean = displayObject.hitTestPoint(checkPosition.x, checkPosition.y + diff.y, true);
-            
-            if (test) {
-                testPosition.x = position.x
-                testPosition.y = position.y + size.y + diff.y
-                if (speed.y > 0) {
-                    var move:Number = 0
-                    test = displayObject.hitTestPoint(checkPosition.x, checkPosition.y + move, true);
-                    while (!test) {
-                        test = displayObject.hitTestPoint(checkPosition.x, checkPosition.y + move, true);
-                        move += 1;
-                    }
-                    speed.y = move / dt;
-                } else {
-                    speed.y = 0
-                }
-                return true;
+            var lengthSoFar:Number = 0;
+
+            while (lengthSoFar <= length) {
+                output.push(start.add(segment.times(lengthSoFar)))
+                lengthSoFar += step
             }
 
-            return false;
+            return output
+        }
+
+        public function findContactPoint(displayObject:DisplayObject, hit:Vector2, miss:Vector2):Vector2 {
+            var hitPoint:Vector2 = hit
+            var missPoint:Vector2 = miss
+            var length:Number = Number.MAX_VALUE;
+
+            while(length > 0.1) {
+                var mid:Vector2 = missPoint.add(hitPoint.add(missPoint.times(-1)).times(0.5))
+
+                var test:Boolean = displayObject.hitTestPoint(mid.x, mid.y, true);
+
+                if (test) {
+                    hitPoint = mid
+                } else {
+                    missPoint = mid
+                }
+
+                var diff:Vector2 = hitPoint.add(missPoint.times(-1))
+                length = diff.length()
+            }
+
+            return missPoint
+        }
+
+        public function makeTypePointPair(type:String, points:Array):Dictionary {
+            var dict:Dictionary = new Dictionary();
+            dict["type"] = type;
+            dict["points"] = points;
+            return dict;
+        }
+
+        public function mainCollisionPoints():Array {
+            var wallPointStartHeight:Number = 20
+
+            return new Array(
+                makeTypePointPair(
+                    "bottom_middle",
+                    new Array(new Vector2(0, 0))
+                ),
+                makeTypePointPair(
+                    "right",
+                    getPointsInRange(
+                        new Vector2(size.x / 2, -wallPointStartHeight),
+                        new Vector2(size.x / 2, -size.y),
+                        MIN_WALL_WIDTH - 0.1
+                    )
+                ),
+                makeTypePointPair(
+                    "left",
+                    getPointsInRange(
+                        new Vector2(-size.x / 2, -wallPointStartHeight),
+                        new Vector2(-size.x / 2, -size.y),
+                        MIN_WALL_WIDTH - 0.1
+                    )
+                ),
+                makeTypePointPair(
+                    "top_middle",
+                    new Array(new Vector2(0, -size.y))
+                )
+            )
+        }
+
+        public function platformCollisionPoints():Array {
+            return new Array(
+                makeTypePointPair(
+                    "bottom_middle",
+                    new Array(new Vector2(0, 0))
+                )
+            )
+        }
+
+        public function handleLevelCollision(dt:Number, displayObject:DisplayObject, collisionPoints:Array):Boolean {
+            var result:Boolean = false;
+            var diff:Vector2 = speed.times(dt)
+
+            for each (var dict:Dictionary in collisionPoints) {
+                var key:String = dict["type"]
+                var pointList:Array = dict["points"];
+                var filteredDiff:Vector2 = new Vector2()
+
+                if (key == "bottom_middle") {
+                    if (diff.y >= 0) {
+                        filteredDiff = new Vector2(0, diff.y)
+                    } else {
+                        filteredDiff = null
+                    }
+                } else if (key == "right") {
+                    if (diff.x >= 0) {
+                        filteredDiff = new Vector2(diff.x, 0)
+                    } else {
+                        filteredDiff = null
+                    }
+                } else if (key == "left") {
+                    if (diff.x <= 0) {
+                        filteredDiff = new Vector2(diff.x, 0)
+                    } else {
+                        filteredDiff = null
+                    }
+                } else if (key == "top_middle") {
+                    if (diff.y <= 0) {
+                        filteredDiff = new Vector2(0, diff.y)
+                    } else {
+                        filteredDiff = null
+                    }
+                }
+
+                if (filteredDiff != null) {
+                    for each (var testPoint:Vector2 in pointList) {
+                        // if hitting at current location
+                            // find point where not hitting
+                            // binary search for contact point
+                            // set appropriate velocity to 0
+                        // if about to hit
+                            // find point where not hitting
+                            // binary search for contact point
+                            // set appropriate velocity to 0
+
+                        var parentPosition:Vector2 = new Vector2(-GameLogic.camera.x, -GameLogic.camera.y);
+                        var currentPosition:Vector2 = parentPosition.add(position.add(testPoint));
+                        var test:Boolean = displayObject.hitTestPoint(currentPosition.x, currentPosition.y, true);
+
+                        if (test) {
+                            var movement:Vector2 = new Vector2()
+                            var move:Vector2 = new Vector2()
+
+                            if (key == "bottom_middle") {
+                                move = new Vector2(0, -10);
+                                speed.y = 0
+                                result = true;
+                            } else if (key == "right") {
+                                move = new Vector2(-10, 0)
+                                speed.x = 0;
+                            } else if (key == "left") {
+                                move = new Vector2(10, 0)
+                                speed.x = 0;
+                            } else if (key == "top_middle") {
+                                move = new Vector2(0, 10)
+                                speed.y = 0
+                            }
+
+                            while (test) {
+                                test = displayObject.hitTestPoint(currentPosition.x + movement.x, currentPosition.y + movement.y, true);
+                                movement = movement.add(move)
+                            }
+
+                            var contact:Vector2 = findContactPoint(displayObject, currentPosition, currentPosition.add(move))
+                            position = contact.add(parentPosition.add(testPoint).times(-1))
+                            x = position.x
+                            y = position.y
+                        } else {
+                            var points:Array = getPointsInRange(currentPosition.add(filteredDiff), currentPosition, MIN_WALL_WIDTH - 0.1)
+
+                            for (var i = points.length - 1; i >= 0; i--) {
+                                test = displayObject.hitTestPoint(points[i].x, points[i].y, true);
+
+                                if (test) {
+                                    if (key == "bottom_middle") {
+                                        speed.y = 0
+                                        result = true;
+                                    } else if (key == "right") {
+                                        speed.x = 0;
+                                    } else if (key == "left") {
+                                        speed.x = 0;
+                                    } else if (key == "top_middle") {
+                                        speed.y = 0
+                                    }
+
+                                    var contact:Vector2 = findContactPoint(displayObject, currentPosition, points[i])
+                                    position = contact.add(parentPosition.add(testPoint).times(-1))
+                                    x = position.x
+                                    y = position.y
+
+                                    break
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            return result;
         }
 		
 		public function update(input:Input, dt:Number, level:Level):void {

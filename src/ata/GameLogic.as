@@ -6,6 +6,8 @@ package ata
     import flash.display.Sprite;
     import flash.events.Event;
     import flash.geom.Point;
+    import flash.system.fscommand;
+    import flash.ui.Keyboard;
     import flash.utils.getTimer;
     /**
      * ...
@@ -56,10 +58,11 @@ package ata
             worldMap[World.REALITY] = realWorld;
             addChild(realWorld);
             
-            //realWorld.fadeTo(0.8);
 
             level = new Level();
             addEntity(level);
+            
+            addEntity(new Bird(w / 3, h / 4));
             
             player = new Player(w/2, 0);
             addEntity(player);
@@ -88,6 +91,11 @@ package ata
                     overtime = overtime - T;
                     fixedupdate(T);
                     input.update(T);
+                    if (input.justpressed(Keyboard.Q) || input.justpressed(Keyboard.ESCAPE)) {
+                        fscommand("quit");
+                    } else if (input.justpressed(Keyboard.R)) {
+                        // Reset scene to initial state
+                    }
                 }
                 updateHUD();
             }
