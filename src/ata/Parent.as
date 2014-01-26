@@ -9,11 +9,11 @@ package ata
         
         public function Parent() 
         {
-            super(0, 170);
+            super(0, 130);
 			
             addDisplay(World.REALITY, new parent_reality());
 
-            GameLogic.worldMap[World.IMAGINATION].addSubtractiveBubble(this, 50);
+            GameLogic.worldMap[World.IMAGINATION].addSubtractiveBubble(this, 68);
         }
         
     }

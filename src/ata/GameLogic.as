@@ -47,12 +47,16 @@ package ata
         private var levelList:Vector.<Level>;
         
         private var entities:Vector.<Entity> = new Vector.<Entity>();
+        public var stars:Vector.<Star> = new Vector.<Star>();
+        public var effects:Vector.<Effect> = new Vector.<Effect>()
         
         public static var worldMap:Object = {};
 
-        private var cameraOffset:Point = new Point(400, 300);
-        private var cameraVelocity:Point = new Point(0, 0);
-        public static var camera:Point = new Point(0, 0);
+        public static var numStars:int = 0;
+
+        private var cameraOffset:Vector2 = new Vector2(400, 300);
+        private var cameraVelocity:Vector2 = new Vector2(0, 0);
+        public static var camera:Vector2 = new Vector2(0, 0);
         
         public static var instance:GameLogic;
 
@@ -106,7 +110,7 @@ package ata
             
             addEntity(new Bird(w / 3, - h / 4));
             
-            player = new Player(w/2, 0);
+            player = new Player(75, 0);
             addEntity(player);
         }
 
@@ -142,6 +146,17 @@ package ata
                 }
                 draw();
             }
+            
+            for each(var effect:Effect in effects)
+            {
+                effect.timeLeft --;
+                if (effect.timeLeft <= 0)
+                {
+                    trace("remove");
+                    //removeEntity(effect);
+                    //effects.splice(effects.indexOf(effect), 1);
+                }
+            }
         }
 
         private function updateCamera(dt:Number):void
@@ -150,8 +165,8 @@ package ata
             camera.y += cameraVelocity.y * dt;
             camera.x = Math.max(level.x1, Math.min(camera.x,level.x2));
 
-            var cameraVelocityDelta:Point = new Point(0,0);
-            var nextCameraVelocityDelta:Point = new Point(0,0);
+            var cameraVelocityDelta:Vector2 = new Vector2(0,0);
+            var nextCameraVelocityDelta:Vector2 = new Vector2(0,0);
             cameraVelocityDelta.x = (player.position.x - cameraOffset.x - camera.x) * 4;
             cameraVelocityDelta.y = (player.position.y - cameraOffset.y - camera.y) * 4;
 
@@ -173,6 +188,16 @@ package ata
             {
                 cameraVelocity.y += cameraVelocityDelta.y;
                 cameraVelocity.y *= 0.5;
+            }
+
+            if (Math.abs(cameraVelocityDelta.x) < 100) {
+                cameraVelocity.x = 0
+                cameraVelocityDelta.x = 0
+            }
+
+            if (Math.abs(cameraVelocityDelta.y) < 100) {
+                cameraVelocity.y = 0
+                cameraVelocityDelta.y = 0
             }
 
             this.x = -camera.x
@@ -215,14 +240,31 @@ package ata
                     }
                 }
             }
+            
             if (player.influencedBy[World.REALITY])
             {
                 player.bubble.scaleModifier -= player.bubble.scaleModifier / 5
             }
             else
             {
+                for each(var starEntity:Star in stars)
+                {
+                    if (player.position.diff(starEntity.position) < (player.size.length() + starEntity.size.length())/4)
+                    {
+                        removeEntity(starEntity);
+                        stars.splice(stars.indexOf(starEntity), 1);
+                        numStars++;
+                        
+                        var explode:Effect = new Effect(new explosion(), 16);
+                        explode.position.x = starEntity.position.x;
+                        explode.position.y = starEntity.position.y;
+                        effects.push(explode);
+                        addEntity(explode);
+                    }
+                }
                 player.bubble.scaleModifier += (1 - player.bubble.scaleModifier) / 5
             }
+            
             updateCamera(dt);
         }
         
@@ -253,6 +295,47 @@ package ata
                     world.addChild(displayObject);
                 }
             }
+        }
+        
+        public function removeEntity(e:Entity):void
+        {
+            var world:World;
+            var worldString:String;
+            var displayObjects:Vector.<DisplayObject>;
+            var displayObject:DisplayObject;
+            entities.splice(entities.indexOf(e),1);
+            for (worldString in e.displayObjects)
+            {
+                makeWorldIfNotExists(worldString);
+                world = worldMap[worldString];
+                displayObjects = e.displayObjects[worldString];
+                for each (displayObject in displayObjects)
+                {
+                    world.removeChild(displayObject);
+                }
+            }
+            
+            /*for (worldString in e.additiveMasks)
+            {
+                makeWorldIfNotExists(worldString);
+                world = worldMap[worldString];
+                displayObjects = e.additiveMasks[worldString];
+                for each (displayObject in displayObjects)
+                {
+                    world.additiveMask.removeChild(displayObject);
+                }
+            }
+            
+            for (worldString in e.subtractiveMasks)
+            {
+                makeWorldIfNotExists(worldString);
+                world = worldMap[worldString];
+                displayObjects = e.subtractiveMasks[worldString];
+                for each (displayObject in displayObjects)
+                {
+                    world.subtractiveMask.removeChild(displayObject);
+                }
+            }*/
         }
 
         public function stoplistening():void
