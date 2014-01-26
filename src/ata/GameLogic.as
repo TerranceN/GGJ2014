@@ -200,7 +200,7 @@ package ata
                     {
                         for (worldString in otherEntity.influences)
                         {
-                            if (entity.position.diff(otherEntity.position)-entity.size.length()/2 < otherEntity.influences[worldString])
+                            if (entity.position.diff(otherEntity.position)-entity.size.length() < otherEntity.influences[worldString])
                             {
                                 entity.influencedBy[worldString] = true;
                             }
