@@ -10,8 +10,8 @@ package ata.levels
     public class Level2 extends Level 
     {
         
-        var wanderRight:Boolean = false;
-        var parentObj:Parent;
+        public var wanderRight:Boolean = false;
+        public var parentObj:Parent;
         public function Level2() 
         {
             super(new kitchen_reality(), new kitchen_reality_hitbox(), new kitchen_reality_platforms(),

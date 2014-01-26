@@ -21,7 +21,7 @@ package ata
         public var bubble:EffectBubble = null;
         private static const IMG_SCALE:Number = 0.7;
 
-        private static const MAX_SPEED_REAL:Number = 150;
+        private static const MAX_SPEED_REAL:Number = 155;
         private static const ACCEL_REAL:Number = 450;
         private static const DECEL_REAL:Number = 450;
         private static const JUMP_REAL:Number = 400;
