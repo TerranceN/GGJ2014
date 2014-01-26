@@ -26,18 +26,15 @@ package ata.levels
         
 		public override function update(input:Input, dt:Number, level:Level):void 
         {
-            if (Math.abs(parentObj.position.x - GameLogic.instance.player.position.x) < movement*dt)
-            {
-                parentObj.position.x = GameLogic.instance.player.position.x;
-                parentObj.speed.x = 0;
-            }
-            else if (parentObj.position.x < GameLogic.instance.player.position.x)
+            if (parentObj.position.x < GameLogic.instance.player.position.x - 100)
             {
                 parentObj.speed.x = movement;
             }
-            else if (parentObj.position.x > GameLogic.instance.player.position.x)
+            else if (parentObj.position.x > GameLogic.instance.player.position.x + 100)
             {
                 parentObj.speed.x = -movement;
+            } else {
+                parentObj.speed.x = 0
             }
         }
         

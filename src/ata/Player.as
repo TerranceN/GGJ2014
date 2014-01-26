@@ -65,7 +65,7 @@ package ata
             addDisplay(World.REALITY, playerReal);
             addDisplay(World.IMAGINATION, playerImag);
 
-            bubble = GameLogic.worldMap[World.IMAGINATION].addAdditiveBubble(this, 300);
+            bubble = GameLogic.worldMap[World.IMAGINATION].addAdditiveBubble(this, 150);
         }
 
         override public function update(input:Input, dt:Number, level:Level):void {

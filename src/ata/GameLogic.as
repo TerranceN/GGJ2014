@@ -49,6 +49,7 @@ package ata
         private var entities:Vector.<Entity> = new Vector.<Entity>();
         public var stars:Vector.<Star> = new Vector.<Star>();
         public var effects:Vector.<Effect> = new Vector.<Effect>()
+        public var carryableObjects:Vector.<CarryableObject> = new Vector.<CarryableObject>()
         
         public static var worldMap:Object = {};
 
@@ -84,6 +85,7 @@ package ata
             levelList.push(new Level1());
             levelList.push(new Level2());
             setLevel(0);
+
         }
         
         public function clearEntities():void {
@@ -112,6 +114,9 @@ package ata
             
             player = new Player(75, 0);
             addEntity(player);
+
+            var testObj = new CarryableObject(player.position.add(new Vector2(500, 0)), new BirdFly())
+            carryableObjects.push(testObj);
         }
 
         public function update(dt:Number):void {
@@ -145,6 +150,28 @@ package ata
                     input.update(T); // note: this will change justpressed to false for all keys, input dependant logic should happen before this
                 }
                 draw();
+            }
+
+            for each(var obj:CarryableObject in carryableObjects) {
+                var objectToPickUp:Boolean = false
+
+                if (obj.onGround && obj.position.add(player.position.times(-1)).length() < 50) {
+                    objectToPickUp = true
+                    Main.pickUpPrompt.x = player.x - camera.x - Main.pickUpPrompt.width + Main.pickUpPrompt.textWidth / 2
+                    Main.pickUpPrompt.y = player.y - camera.y + 20
+                    Main.pickUpPrompt.visible = true
+                    // objects are close enough, prompt player
+
+                    // if player presses v, pick up the object
+                    if (input.isdown(Keyboard.V)) {
+                        trace("qwerty")
+                        obj.setPickedUp()
+                    }
+                }
+
+                if (!objectToPickUp) {
+                    Main.pickUpPrompt.visible = false
+                }
             }
             
             for each(var effect:Effect in effects)
