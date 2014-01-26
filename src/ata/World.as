@@ -138,7 +138,6 @@ package ata
                 maskData.fillRect(maskData.rect, 0);
             }
 
-
             var bitmap = new Bitmap(maskData)
             oldBitmapInverse = bitmap
             bitmap.cacheAsBitmap = true

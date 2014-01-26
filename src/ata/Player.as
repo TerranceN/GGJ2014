@@ -11,6 +11,7 @@ package ata
     public class Player extends Entity
     {
         private var isJumping:Boolean = true;
+        private var freeFell:Boolean = false;
 
         public var playerReal:MovieClip;
         public var playerImag:MovieClip;
@@ -52,7 +53,7 @@ package ata
             addDisplay(World.REALITY, playerReal);
             addDisplay(World.IMAGINATION, playerImag);
 
-            bubble = GameLogic.worldMap[World.IMAGINATION].addAdditiveBubble(this, 200);
+            bubble = GameLogic.worldMap[World.IMAGINATION].addAdditiveBubble(this, 400);
         }
 
         override public function update(input:Input, dt:Number, level:Level):void {
@@ -76,6 +77,7 @@ package ata
             if (input.isdown(Keyboard.SPACE) && !isJumping) {
                 speed.y = -JUMP;
                 isJumping = true;
+                freeFell = false;
             }
 
             if (input.isdown(Keyboard.A) || input.isdown(Keyboard.LEFT)) {
@@ -103,18 +105,24 @@ package ata
             }
 
             var hitGround:Boolean;
+            var hitPlatform:Boolean;
             if (influencedBy[World.REALITY]) {
                 hitGround = handleLevelCollision(dt, level.realityCollision, mainCollisionPoints())
-                hitGround = hitGround || handleLevelCollision(dt, level.realityPlatforms, platformCollisionPoints())
-            } else {
+                hitPlatform = handleLevelCollision(dt, level.realityPlatforms, platformCollisionPoints())
+            }    else {
                 hitGround = handleLevelCollision(dt, level.imaginationCollision, mainCollisionPoints())
-                hitGround = hitGround || handleLevelCollision(dt, level.imaginationPlatforms, platformCollisionPoints())
+                hitPlatform = handleLevelCollision(dt, level.imaginationPlatforms, platformCollisionPoints())
             }
 
-            if (hitGround) {
+            if (hitGround || hitPlatform) {
                 isJumping = false;
             }
-
+            
+            if (speed.y > 1 && !hitPlatform)
+            {
+                freeFell = true;
+            }
+            
             super.update(input, dt, level);
             
             if (position.x < level.x1) {
