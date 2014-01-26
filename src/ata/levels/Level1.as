@@ -20,23 +20,21 @@ package ata.levels
         public function Level1() 
         {
             super(new playground_reality(), new playground_reality_hitbox(), new playground_reality_platforms(),
-                    new playground_imagination(), new playground_reality_hitbox(), new playground_imagination_platforms());
+                    new playground_imagination(), new playground_imagination_hitbox(), new playground_imagination_platforms());
         }
         
         
 		public override function update(input:Input, dt:Number, level:Level):void 
         {
-            if (Math.abs(parentObj.position.x - GameLogic.instance.player.position.x) < movement*dt)
+            if (parentObj.position.x < GameLogic.instance.player.position.x - 100)
             {
-                parentObj.position.x = GameLogic.instance.player.position.x;
+                parentObj.speed.x = movement;
             }
-            else if (parentObj.position.x < GameLogic.instance.player.position.x)
+            else if (parentObj.position.x > GameLogic.instance.player.position.x + 100)
             {
-                parentObj.position.x += movement*dt;
-            }
-            else if (parentObj.position.x > GameLogic.instance.player.position.x)
-            {
-                parentObj.position.x -= movement*dt;
+                parentObj.speed.x = -movement;
+            } else {
+                parentObj.speed.x = 0
             }
         }
         
