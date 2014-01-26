@@ -4,6 +4,7 @@ package ata.levels
     import ata.Parent;
     import ata.Input;
     import ata.GameLogic;
+    import flash.display.Shape;
     import ata.Star;
 	/**
      * ...
@@ -18,8 +19,8 @@ package ata.levels
         
         public function Level1() 
         {
-            super(new playground_reality(), new playground_reality_hitbox(), new playground_reality_platforms(), new playground_imagination());
-            
+            super(new playground_reality(), new playground_reality_hitbox(), new playground_reality_platforms(),
+                    new playground_imagination(), new playground_reality_hitbox(), new playground_imagination_platforms());
         }
         
         

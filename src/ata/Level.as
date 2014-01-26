@@ -14,11 +14,14 @@ package ata
 		public var realityPlatforms:DisplayObject;
 		public var realityCollision:DisplayObject;
         public var imagination:DisplayObject;
+		public var imaginationPlatforms:DisplayObject;
+		public var imaginationCollision:DisplayObject;
 		
         public var x1:int;
         public var x2:int;
         
-		public function Level(real:DisplayObject, realHit:DisplayObject, realPlat:DisplayObject, imag:DisplayObject) 
+        //, imagDeath:DisplayObject
+		public function Level(real:DisplayObject, realHit:DisplayObject, realPlat:DisplayObject, imag:DisplayObject, imagHit:DisplayObject, imagPlat:DisplayObject) 
 		{
             var bounds:Rectangle = realHit.getBounds(realHit);
             x1 = bounds.x;
@@ -28,18 +31,26 @@ package ata
             position.y = 0;
 
             reality = real;
-			addDisplay(World.REALITY, real);
+			addDisplay(World.REALITY, reality);
 			    
             realityPlatforms = realPlat
-			realPlat.alpha = 0;
-			addDisplay(World.REALITY, realPlat);
+			realityPlatforms.alpha = 0;
+			addDisplay(World.REALITY, realityPlatforms);
             
             realityCollision = realHit;
-            realHit.alpha = 0;
-			addDisplay(World.REALITY, realHit);
+            realityCollision.alpha = 0;
+			addDisplay(World.REALITY, realityCollision);
             
             imagination = imag;
-			addDisplay(World.IMAGINATION, imag);
+			addDisplay(World.IMAGINATION, imagination);
+			    
+            imaginationPlatforms = imagPlat
+			imaginationPlatforms.alpha = 0;
+			addDisplay(World.REALITY, imaginationPlatforms);
+            
+            imaginationCollision = imagHit;
+            imaginationCollision.alpha = 0;
+			addDisplay(World.REALITY, imaginationCollision);
 		}
         
         public function setupLevel(logic:GameLogic):void

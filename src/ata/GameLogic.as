@@ -190,7 +190,7 @@ package ata
                 entity.update(input, dt, level);
                 
                 var worldString:String;
-                for (worldString in entity.influencedBy)
+                for each (worldString in World.TYPES)
                 {
                     entity.influencedBy[worldString] = false;
                 }
@@ -226,6 +226,8 @@ package ata
                     if (player.position.diff(starEntity.position) < player.size.length() + starEntity.size.length())
                     {
                         trace("star")
+                        removeEntity(starEntity);
+                        stars.splice(stars.indexOf(starEntity), 1);
                     }
                 }
             }

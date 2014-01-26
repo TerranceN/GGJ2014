@@ -13,7 +13,7 @@ package ata
 			
             addDisplay(World.REALITY, new parent_reality());
             addRadialAdditiveMask(World.REALITY, 140);
-            addRadialSubtractiveMask(World.IMAGINATION, 265);
+            addRadialSubtractiveMask(World.IMAGINATION, 235);
         }
         
     }

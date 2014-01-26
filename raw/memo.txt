@@ -1,0 +1,13 @@
+parent art
+collect stars
+put in music
+parent to patrol/idle/follow
+2nd level/area
+solve potential collision /influence bugs
+
+implement stick/wood sword/weapon and pickup/swing mechanic/animation
+add some introduction information (minimal: hotkeys indicated as needed)
+
+doodad ojects/decorations/clouds
+
+kill bird / fire bird enemy

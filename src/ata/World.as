@@ -13,6 +13,7 @@ package ata
         
         public static const REALITY:String = "REALITY";
         public static const IMAGINATION:String = "IMAGINATION";
+        public static const TYPES:Array = [World.REALITY, World.IMAGINATION];
         
         public static const grow_factor:Number = 0.2;
         
