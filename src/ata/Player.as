@@ -47,7 +47,7 @@ package ata
 
             playerReal = new RPlayer();
             playerImag = new IPlayer();
-            swordReal = new ISword();
+            swordReal = new RSword();
             swordImag = new ISword();
             playerReal.gotoAndStop(IDLE_FRAME);
             playerImag.gotoAndStop(IDLE_FRAME);

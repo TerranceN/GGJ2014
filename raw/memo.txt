@@ -15,3 +15,6 @@ kill bird / fire bird enemy
 player new face / details (hair)
 
 parent order layering
+
+sword: onground + swing animations
+bkg text for how to pick up

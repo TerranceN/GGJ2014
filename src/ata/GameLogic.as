@@ -166,6 +166,8 @@ package ata
                     if (input.isdown(Keyboard.V)) {
                         trace("qwerty")
                         obj.setPickedUp()
+                        player.swordImag.visible = true;
+                        player.swordReal.visible = true;
                     }
                 }
 
