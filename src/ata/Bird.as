@@ -37,9 +37,9 @@ package ata
         }
 
         override public function update(input:Input, dt:Number, level:Level):void {
-            if (position.x > 600) {
+            if (position.x > level.x2) {
                 speed.x = -SPEED;
-            } else if (position.x < -100) {
+            } else if (position.x < level.x1) {
                 speed.x = SPEED;
             }
 

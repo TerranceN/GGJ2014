@@ -25,6 +25,12 @@ package ata
 
         public var overtime:Number = 0;
         public static var T:Number = 0.033; // time between fixed update frames
+        
+        // for FPS indicator        
+		private var framecount:uint = 0;
+		private var interval:Number = 0;
+        //
+        
         public static var ground:int = 400;
         private var w:int;
         private var h:int;
@@ -33,23 +39,28 @@ package ata
         private var player:Player;
 
         private var level:Level;
+        public var levelNum:int;
+        private var levelList:Vector.<Level>;
         
         private var entities:Vector.<Entity> = new Vector.<Entity>();
         
-        private static var worldMap:Object = {};
+        private static var worldMap:Object = {}; // STRING -> WORLD
 
         private var cameraOffset:Point = new Point(400, 300);
         private var cameraVelocity:Point = new Point(0, 0);
         public static var camera:Point = new Point(0, 0);
+        
+        public static var instance:GameLogic;
 
         public function GameLogic(w:int, h:int, input:Input) 
         {
+            instance = this;
+            
             this.w = w;
             this.h = h;
             this.input = input;
-
-            addEventListener(Event.ENTER_FRAME, update);
             
+            addEventListener(Event.ENTER_FRAME, update);
             
             var imgWorld:World = new World();
             worldMap[World.IMAGINATION] = imgWorld;
@@ -59,10 +70,37 @@ package ata
             worldMap[World.REALITY] = realWorld;
             addChild(realWorld);
             
-            level = new Level(new level1_reality(), new level1_reality_hitbox(), new level1_reality_platforms(), new level_1_imagination());
-            addEntity(level);
+            levelList = new Vector.<Level>();
+            levelList.push(new Level(new level1_reality(), new Scene1RealHit(), new Sprite(), new Scene1Real));
+            levelList.push(new Level(new level1_reality(), new level1_reality_hitbox(), new level1_reality_platforms(), new level_1_imagination()));
+            setLevel(1);
+        }
+        
+        public function clearEntities():void {
+            for each (var world:World in worldMap) {
+                while (world.display.numChildren > 0) {
+                    world.display.removeChildAt(0);
+                }
+                while (world.additiveMask.numChildren > 0) {
+                    world.additiveMask.removeChildAt(0);
+                }
+                while (world.subtractiveMask.numChildren > 0) {
+                    world.subtractiveMask.removeChildAt(0);
+                }
+            }
+            entities = new Vector.<Entity>();
+        }
+        
+        public function setLevel(n:uint):void {
+            if (n < 0 || n >= levelList.length) return;
             
-            addEntity(new Bird(w / 3, h / 4));
+            clearEntities();
+            
+            levelNum = n;
+            level = levelList[n];
+            
+            addEntity(level);
+            addEntity(new Bird(w / 3, - h / 4));
             
             player = new Player(w/2, 0);
             addEntity(player);
@@ -83,6 +121,15 @@ package ata
             dt =  Math.min(0.1, (t - totaltime) / 1000);
             totaltime = t;
 
+            if (Main.showFPS) {
+                interval += dt;
+                framecount++;
+                if (interval > 0.5) {
+                    var framerate:int = int(framecount / interval);//1 / dt;
+                    Main.FPS.setText("FPS: " + framerate);
+                }
+            }
+            
             if (!Paused)
             {
                 overtime = overtime + dt;

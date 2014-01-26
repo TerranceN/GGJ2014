@@ -70,6 +70,12 @@ package ata
             }
 
             super.update(input, dt, level);
+            
+            if (position.x < level.x1) {
+                GameLogic.instance.setLevel(GameLogic.instance.levelNum - 1);
+            } else if (position.x > level.x2) {
+                GameLogic.instance.setLevel(GameLogic.instance.levelNum + 1);
+            }
         }
     }
 }
