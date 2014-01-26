@@ -14,7 +14,7 @@ package ata
 	{
 		private var input:Input;
 		public static var Score:DisplayText;
-        public static const TOTAL_STARS:int = 4;
+        public static const TOTAL_STARS:int = 8;
         
 		public static var FPS:DisplayText;
         public static var showFPS:Boolean;

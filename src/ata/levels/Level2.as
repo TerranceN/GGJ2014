@@ -66,6 +66,24 @@ package ata.levels
             parentObj.addInfluence(World.REALITY, 300)
             
             logic.addEntity(parentObj);
+            
+            var nextStar:Star = new Star();
+            nextStar.position.x = 2500;
+            nextStar.position.y = -150;
+            logic.stars.push(nextStar);
+            logic.addEntity(nextStar);
+            
+            nextStar = new Star();
+            nextStar.position.x = 600;
+            nextStar.position.y = -500;
+            logic.stars.push(nextStar);
+            logic.addEntity(nextStar);
+            
+            nextStar = new Star();
+            nextStar.position.x = 3000;
+            nextStar.position.y = -400;
+            logic.stars.push(nextStar);
+            logic.addEntity(nextStar);
         }
     }
 
