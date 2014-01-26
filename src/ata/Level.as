@@ -3,6 +3,7 @@ package ata
 	import flash.display.DisplayObject;
     import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
+    import flash.geom.Rectangle;
 	/**
 	 * ...
 	 * @author Terrance
@@ -14,22 +15,32 @@ package ata
 		public var realityCollision:DisplayObject;
         public var imagination:DisplayObject;
 		
-		public function Level() 
+        public var x1:int;
+        public var x2:int;
+        
+		public function Level(real:DisplayObject, realHit:DisplayObject, realPlat:DisplayObject, imag:DisplayObject) 
 		{
+            var bounds:Rectangle = realHit.getBounds(realHit);
+            x1 = bounds.x;
+            x2 = x1 + bounds.width;
+            trace(x1, x2);
+            
             super(0, 0);
-			reality = new level1_reality();
-			addDisplay(World.REALITY, reality);
-			
-			realityPlatforms = new level1_reality_platforms();
-            realityPlatforms.alpha = 0;
-			addDisplay(World.REALITY, realityPlatforms);
+            position.y = 0;
+
+            reality = real;
+			addDisplay(World.REALITY, real);
+			    
+            realityPlatforms = realPlat
+			realPlat.alpha = 0;
+			addDisplay(World.REALITY, realPlat);
             
-			realityCollision = new level1_reality_hitbox();
-            realityCollision.alpha = 0;
-			addDisplay(World.REALITY, realityCollision);
+            realityCollision = realHit;
+            realHit.alpha = 0;
+			addDisplay(World.REALITY, realHit);
             
-			imagination = new level_1_imagination();
-			addDisplay(World.IMAGINATION, imagination);
+            imagination = imag;
+			addDisplay(World.IMAGINATION, imag);
 		}
 	}
 

@@ -50,6 +50,7 @@ package ata
 
             addEventListener(Event.ENTER_FRAME, update);
             
+            
             var imgWorld:World = new World();
             worldMap[World.IMAGINATION] = imgWorld;
             addChild(imgWorld);
@@ -58,8 +59,7 @@ package ata
             worldMap[World.REALITY] = realWorld;
             addChild(realWorld);
             
-
-            level = new Level();
+            level = new Level(new level1_reality(), new level1_reality_hitbox(), new level1_reality_platforms(), new level_1_imagination());
             addEntity(level);
             
             addEntity(new Bird(w / 3, h / 4));
@@ -105,6 +105,7 @@ package ata
         {
             camera.x += cameraVelocity.x * dt;
             camera.y += cameraVelocity.y * dt;
+            camera.x = Math.max(level.x1, Math.min(camera.x,level.x2));
 
             var cameraVelocityDelta:Point = new Point(0,0);
             var nextCameraVelocityDelta:Point = new Point(0,0);
