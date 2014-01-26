@@ -53,10 +53,9 @@ package ata
         public static var worldMap:Object = {};
 
         public static var numStars:int = 0;
-        
-        private var cameraOffset:Point = new Point(400, 350);
-        private var cameraVelocity:Point = new Point(0, 0);
-        public static var camera:Point = new Point(0, 0);
+        private var cameraOffset:Vector2 = new Vector2(400, 350);
+        private var cameraVelocity:Vector2 = new Vector2(0, 0);
+        public static var camera:Vector2 = new Vector2(0, 0);
         
         public static var instance:GameLogic;
 
@@ -138,12 +137,12 @@ package ata
                 {
                     overtime = overtime - T;
                     fixedupdate(T);
-                    input.update(T);
                     if (input.justpressed(Keyboard.Q) || input.justpressed(Keyboard.ESCAPE)) {
                         fscommand("quit");
                     } else if (input.justpressed(Keyboard.R)) {
                         // Reset scene to initial state
                     }
+                    input.update(T); // note: this will change justpressed to false for all keys, input dependant logic should happen before this
                 }
                 draw();
             }
@@ -165,8 +164,8 @@ package ata
             camera.y += cameraVelocity.y * dt;
             camera.x = Math.max(level.x1, Math.min(camera.x,level.x2-this.w-50));
 
-            var cameraVelocityDelta:Point = new Point(0,0);
-            var nextCameraVelocityDelta:Point = new Point(0,0);
+            var cameraVelocityDelta:Vector2 = new Vector2(0,0);
+            var nextCameraVelocityDelta:Vector2 = new Vector2(0,0);
             cameraVelocityDelta.x = (player.position.x - cameraOffset.x - camera.x) * 4;
             cameraVelocityDelta.y = (player.position.y - cameraOffset.y - camera.y) * 4;
 
@@ -188,6 +187,16 @@ package ata
             {
                 cameraVelocity.y += cameraVelocityDelta.y;
                 cameraVelocity.y *= 0.5;
+            }
+
+            if (Math.abs(cameraVelocityDelta.x) < 100) {
+                cameraVelocity.x = 0
+                cameraVelocityDelta.x = 0
+            }
+
+            if (Math.abs(cameraVelocityDelta.y) < 100) {
+                cameraVelocity.y = 0
+                cameraVelocityDelta.y = 0
             }
 
             this.x = -camera.x

@@ -71,7 +71,6 @@
 			return key;
 		}
 		private function keydown(e:KeyboardEvent):void {
-			var key:String = keyfromcode(e.keyCode);
 			if (! isdown(e.keyCode)) keys[e.keyCode] = pressed;
 		}
 		private function keyup(e:KeyboardEvent):void {
@@ -89,7 +88,8 @@
 			dmy = stage.mouseY - oldmousey;
 			oldmousex = stage.mouseX;
 			oldmousey = stage.mouseY;
-			for each (var key:uint in keys) {
+            
+			for (var key:String in keys) {
 				switch (keys[key]) {
 					case released:
 						keys[key] = up;

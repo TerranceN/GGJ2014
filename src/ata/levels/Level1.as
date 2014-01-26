@@ -13,7 +13,7 @@ package ata.levels
     public class Level1 extends Level
     {
         
-        private const movement:Number = 200;
+        private const movement:Number = 130;
         private var parentObj:Parent;
         private var firstStar:Star;
         
