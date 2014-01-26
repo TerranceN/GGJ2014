@@ -9,6 +9,8 @@ package ata
     import flash.system.fscommand;
     import flash.ui.Keyboard;
     import flash.utils.getTimer;
+	import flash.display.BitmapData;
+	import flash.display.Bitmap;
     /**
      * ...
      * @author Matthew Hyndman
@@ -26,8 +28,8 @@ package ata
         public var overtime:Number = 0;
         public static var T:Number = 0.033; // time between fixed update frames
         public static var ground:int = 400;
-        private var w:int;
-        private var h:int;
+        public var w:int;
+        public var h:int;
         public var input:Input;
 
         private var player:Player;
@@ -36,20 +38,23 @@ package ata
         
         private var entities:Vector.<Entity> = new Vector.<Entity>();
         
-        private static var worldMap:Object = {};
+        public static var worldMap:Object = {};
 
         private var cameraOffset:Point = new Point(400, 300);
         private var cameraVelocity:Point = new Point(0, 0);
         public static var camera:Point = new Point(0, 0);
 
+        public static var instance:GameLogic
+
         public function GameLogic(w:int, h:int, input:Input) 
         {
+            instance = this
+
             this.w = w;
             this.h = h;
             this.input = input;
 
             addEventListener(Event.ENTER_FRAME, update);
-            
             
             var imgWorld:World = new World();
             worldMap[World.IMAGINATION] = imgWorld;
@@ -58,6 +63,9 @@ package ata
             var realWorld:World = new World();
             worldMap[World.REALITY] = realWorld;
             addChild(realWorld);
+
+            worldMap[World.REALITY].mask = worldMap[World.IMAGINATION].inverseMaskBitmap
+            addChild(worldMap[World.IMAGINATION].inverseMaskBitmap)
             
             level = new Level(new level1_reality(), new level1_reality_hitbox(), new level1_reality_platforms(), new level_1_imagination());
             addEntity(level);
@@ -97,7 +105,7 @@ package ata
                         // Reset scene to initial state
                     }
                 }
-                updateHUD();
+                draw();
             }
         }
 
@@ -136,8 +144,8 @@ package ata
             this.y = -camera.y
         }
 
-        private function updateHUD():void 
-        {
+        private function draw():void {
+            var bitmap:Bitmap = worldMap[World.IMAGINATION].generateMasks()
         }
 
         public function fixedupdate(dt:Number):void //dt is 1/50th of a second
@@ -168,15 +176,11 @@ package ata
             }
             if (player.influencedBy[World.REALITY])
             {
-                worldMap[World.REALITY].scaleAdditiveInfluence(4);
-                worldMap[World.REALITY].scaleSubtractiveInfluence(4);
-                worldMap[World.REALITY].fadeTo(1);
+                player.bubble.scaleModifier -= player.bubble.scaleModifier / 5
             }
             else
             {
-                worldMap[World.REALITY].scaleAdditiveInfluence(1);
-                worldMap[World.REALITY].scaleSubtractiveInfluence(1);
-                worldMap[World.REALITY].fadeTo(0.8);
+                player.bubble.scaleModifier += (1 - player.bubble.scaleModifier) / 5
             }
             updateCamera(dt);
         }
@@ -205,29 +209,7 @@ package ata
                 displayObjects = e.displayObjects[worldString];
                 for each (displayObject in displayObjects)
                 {
-                    world.display.addChild(displayObject);
-                }
-            }
-            
-            for (worldString in e.additiveMasks)
-            {
-                makeWorldIfNotExists(worldString);
-                world = worldMap[worldString];
-                displayObjects = e.additiveMasks[worldString];
-                for each (displayObject in displayObjects)
-                {
-                    world.additiveMask.addChild(displayObject);
-                }
-            }
-            
-            for (worldString in e.subtractiveMasks)
-            {
-                makeWorldIfNotExists(worldString);
-                world = worldMap[worldString];
-                displayObjects = e.subtractiveMasks[worldString];
-                for each (displayObject in displayObjects)
-                {
-                    world.subtractiveMask.addChild(displayObject);
+                    world.addChild(displayObject);
                 }
             }
         }
