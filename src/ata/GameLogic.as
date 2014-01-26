@@ -50,8 +50,8 @@ package ata
             this.input = input;
 
             addEventListener(Event.ENTER_FRAME, update);
-
-            level = new Level();
+            
+            level = new Level(new level1_reality(), new level1_reality_hitbox(), new level1_reality_platforms(), new level_1_imagination());
             addEntity(level);
             
             player = new Player(w/2, h/2 - 100);
@@ -94,6 +94,7 @@ package ata
         {
             camera.x += cameraVelocity.x * dt;
             camera.y += cameraVelocity.y * dt;
+            camera.x = Math.max(level.x1, Math.min(camera.x,level.x2));
 
             var cameraVelocityDelta:Point = new Point(0,0);
             var nextCameraVelocityDelta:Point = new Point(0,0);

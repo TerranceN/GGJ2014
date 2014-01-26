@@ -2,6 +2,9 @@ package ata
 {
     import flash.display.DisplayObject;
     import flash.display.MovieClip;
+    import flash.filters.BlurFilter;
+    import flash.filters.DropShadowFilter;
+    import flash.filters.ShaderFilter;
     import flash.ui.Keyboard;
 
     /**
