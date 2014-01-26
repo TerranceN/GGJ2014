@@ -7,13 +7,14 @@ package ata
     public class Parent extends Entity 
     {
         
+        public var bubble:EffectBubble = null;
         public function Parent() 
         {
             super(0, 130);
 			
             addDisplay(World.REALITY, new parent_reality());
 
-            GameLogic.worldMap[World.IMAGINATION].addSubtractiveBubble(this, 68);
+            bubble = GameLogic.worldMap[World.IMAGINATION].addSubtractiveBubble(this, 68);
         }
         
     }
