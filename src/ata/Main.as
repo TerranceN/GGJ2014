@@ -14,7 +14,7 @@ package ata
 	{
 		private var input:Input;
 		public static var Score:DisplayText;
-        public static const TOTAL_STARS:int = 4;
+        public static const TOTAL_STARS:int = 8;
         
 		public static var FPS:DisplayText;
         public static var showFPS:Boolean;
@@ -40,7 +40,7 @@ package ata
             stage.addChild(FPS);
             stage.addChild(Score);
 
-            pickUpPrompt = new DisplayText(250, 10, "Press V to pick this item up", 12, 0, "LEFT", DisplayText.DefaultFont,0x303030);
+            pickUpPrompt = new DisplayText(250, 10, "Press V to pick up", 16, 0, "LEFT", DisplayText.DefaultFont,0x303030);
             stage.addChild(pickUpPrompt)
             pickUpPrompt.visible = false;
 
