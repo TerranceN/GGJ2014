@@ -23,7 +23,6 @@ package ata
             var bounds:Rectangle = realHit.getBounds(realHit);
             x1 = bounds.x;
             x2 = x1 + bounds.width;
-            trace(x1, x2);
             
             super(0, 0);
             position.y = 0;
@@ -42,6 +41,11 @@ package ata
             imagination = imag;
 			addDisplay(World.IMAGINATION, imag);
 		}
+        
+        public function setupLevel(logic:GameLogic)
+        {
+            
+        }
 	}
 
 }

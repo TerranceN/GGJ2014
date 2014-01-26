@@ -16,10 +16,20 @@ package ata
         public var playerImag:MovieClip;
         private static const IMG_SCALE:Number = 0.7;
 
-        private static const MAX_SPEED:Number = 250;
-        private static const ACCEL:Number = 600;
-        private static const DECEL:Number = 600;
-        private static const JUMP:Number = 450;
+        private static const MAX_SPEED_REAL:Number = 150;
+        private static const ACCEL_REAL:Number = 450;
+        private static const DECEL_REAL:Number = 450;
+        private static const JUMP_REAL:Number = 400;
+        
+        private static const MAX_SPEED_IMAG:Number = 300;
+        private static const ACCEL_IMAG:Number = 850;
+        private static const DECEL_IMAG:Number = 850;
+        private static const JUMP_IMAG:Number = 550;
+        
+        private static var MAX_SPEED:Number = 250;
+        private static var ACCEL:Number = 600;
+        private static var DECEL:Number = 600;
+        private static var JUMP:Number = 450;
         
         private static const IDLE_FRAME:uint = 1;
         private static const WALK_FRAME:uint = 2;
@@ -41,10 +51,25 @@ package ata
             addDisplay(World.REALITY, playerReal);
             addDisplay(World.IMAGINATION, playerImag);
             
-            addRadialAdditiveMask(World.IMAGINATION, 700, false, 150);
+            addRadialAdditiveMask(World.IMAGINATION, 900, false, 150);
         }
 
         override public function update(input:Input, dt:Number, level:Level):void {
+            if (influencedBy[World.REALITY])
+            {
+                MAX_SPEED = MAX_SPEED_REAL;
+                ACCEL = ACCEL_REAL;
+                DECEL = DECEL_REAL;
+                JUMP = JUMP_REAL;
+            }
+            else
+            {
+                MAX_SPEED = MAX_SPEED_IMAG;
+                ACCEL = ACCEL_IMAG;
+                DECEL = DECEL_IMAG;
+                JUMP = JUMP_IMAG;
+            }
+            
             speed.y += GRAVITY * dt;
 
             if (input.isdown(Keyboard.SPACE) && !isJumping) {

@@ -1,5 +1,6 @@
 package ata 
 {
+    import ata.levels.Level1;
     import flash.display.BlendMode;
     import flash.display.DisplayObject;
     import flash.display.MovieClip;
@@ -36,7 +37,7 @@ package ata
         private var h:int;
         public var input:Input;
 
-        private var player:Player;
+        public var player:Player;
 
         private var level:Level;
         public var levelNum:int;
@@ -71,9 +72,8 @@ package ata
             addChild(realWorld);
             
             levelList = new Vector.<Level>();
-            levelList.push(new Level(new level1_reality(), new Scene1RealHit(), new Sprite(), new Scene1Real));
-            levelList.push(new Level(new level1_reality(), new level1_reality_hitbox(), new level1_reality_platforms(), new level_1_imagination()));
-            setLevel(1);
+            levelList.push(new Level1());
+            setLevel(0);
         }
         
         public function clearEntities():void {
@@ -100,20 +100,13 @@ package ata
             level = levelList[n];
             
             addEntity(level);
+            
+            level.setupLevel(this);
+            
             addEntity(new Bird(w / 3, - h / 4));
             
             player = new Player(w/2, 0);
             addEntity(player);
-            
-            var parent:Parent = new Parent();
-            parent.position.x = 800;
-            addEntity(parent);
-            parent = new Parent();
-            parent.position.x = 1000;
-            addEntity(parent);
-            parent = new Parent();
-            parent.position.x = 1200;
-            addEntity(parent);
         }
 
         public function update(dt:Number):void {
@@ -207,7 +200,7 @@ package ata
                     {
                         for (worldString in otherEntity.influences)
                         {
-                            if (entity.position.diff(otherEntity.position) < otherEntity.influences[worldString])
+                            if (entity.position.diff(otherEntity.position)-entity.size.length() < otherEntity.influences[worldString])
                             {
                                 entity.influencedBy[worldString] = true;
                             }
@@ -219,11 +212,13 @@ package ata
             {
                 worldMap[World.REALITY].scaleAdditiveInfluence(4);
                 worldMap[World.REALITY].scaleSubtractiveInfluence(4);
+                worldMap[World.IMAGINATION].scaleSubtractiveInfluence(4);
             }
             else
             {
                 worldMap[World.REALITY].scaleAdditiveInfluence(1);
                 worldMap[World.REALITY].scaleSubtractiveInfluence(1);
+                worldMap[World.IMAGINATION].scaleSubtractiveInfluence(1);
             }
             updateCamera(dt);
         }
@@ -238,7 +233,7 @@ package ata
             }
         }
         
-        private function addEntity(e:Entity):void
+        public function addEntity(e:Entity):void
         {
             var world:World;
             var worldString:String;
