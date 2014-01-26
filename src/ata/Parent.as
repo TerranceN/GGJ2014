@@ -13,6 +13,7 @@ package ata
         private var parentR:MovieClip;
         private static const IMG_SCALE:Number = 0.9;
         
+        public var bubble:EffectBubble = null;
         public function Parent() 
         {
             super(0, 130);
@@ -21,7 +22,7 @@ package ata
             addDisplay(World.REALITY, parentR);
             parentR.gotoAndStop(IDLE_FRAME); 
 
-            GameLogic.worldMap[World.IMAGINATION].addSubtractiveBubble(this, 68);
+            bubble = GameLogic.worldMap[World.IMAGINATION].addSubtractiveBubble(this, 68);
         }
         
         override public function update(input:Input, dt:Number, level:Level):void {

@@ -15,13 +15,16 @@ package ata
 
         public var playerReal:MovieClip;
         public var playerImag:MovieClip;
+        public var swordReal:MovieClip;
+        public var swordImag:MovieClip;
+        
         public var bubble:EffectBubble = null;
 
         public var swinging:Boolean = false;
 
         private static const IMG_SCALE:Number = 0.7;
 
-        private static const MAX_SPEED_REAL:Number = 150;
+        private static const MAX_SPEED_REAL:Number = 155;
         private static const ACCEL_REAL:Number = 450;
         private static const DECEL_REAL:Number = 450;
         private static const JUMP_REAL:Number = 400;
@@ -49,12 +52,21 @@ package ata
 
             playerReal = new RPlayer();
             playerImag = new IPlayer();
+            swordReal = new RSword();
+            swordImag = new ISword();
             playerReal.gotoAndStop(IDLE_FRAME);
             playerImag.gotoAndStop(IDLE_FRAME);
+            swordReal.gotoAndStop(IDLE_FRAME);
+            swordImag.gotoAndStop(IDLE_FRAME);
             
+            swordReal.scaleY = swordImag.scaleY = swordReal.scaleX = swordImag.scaleX = IMG_SCALE;
             playerReal.scaleY = playerImag.scaleY = playerReal.scaleX = playerImag.scaleX = IMG_SCALE;
             
             // for now, show player as always real to show walk animation
+            addDisplay(World.REALITY, swordReal);
+            addDisplay(World.IMAGINATION, swordImag);
+            swordReal.visible = false;
+            swordImag.visible = false;
             addDisplay(World.REALITY, playerReal);
             addDisplay(World.IMAGINATION, playerImag);
 
@@ -102,15 +114,21 @@ package ata
             }
 
             if (speed.x < 0) {
+                swordReal.scaleX = swordImag.scaleX = -IMG_SCALE;
                 playerReal.scaleX = playerImag.scaleX = -IMG_SCALE;
             } else if (speed.x > 0) {
+                swordReal.scaleX = swordImag.scaleX = IMG_SCALE;
                 playerReal.scaleX = playerImag.scaleX = IMG_SCALE;
             }
             
             if (Math.abs(speed.x) < 100) {
+                swordReal.gotoAndStop(IDLE_FRAME);
+                swordImag.gotoAndStop(IDLE_FRAME);
                 playerReal.gotoAndStop(IDLE_FRAME);
                 playerImag.gotoAndStop(IDLE_FRAME);                
             } else {
+                swordReal.gotoAndStop(WALK_FRAME);
+                swordImag.gotoAndStop(WALK_FRAME);
                 playerReal.gotoAndStop(WALK_FRAME);
                 playerImag.gotoAndStop(WALK_FRAME);                
             }

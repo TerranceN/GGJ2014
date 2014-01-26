@@ -13,6 +13,9 @@ package ata
 	public class Main extends Sprite 
 	{
 		private var input:Input;
+		public static var Score:DisplayText;
+        public static const TOTAL_STARS:int = 4;
+        
 		public static var FPS:DisplayText;
         public static var showFPS:Boolean;
 
@@ -32,8 +35,10 @@ package ata
 			input = new Input(stage);
 			addChild(new GameLogic(stage.stageWidth, stage.stageHeight, input));
             
+            Score = new DisplayText(0, 10, "Stars: 0/" + TOTAL_STARS, 36, stage.stageWidth, "CENTER", DisplayText.DefaultFont,0x303030);
             FPS = new DisplayText(250, 10, "FPS:", 12, 0, "LEFT", DisplayText.DefaultFont,0x303030);
             stage.addChild(FPS);
+            stage.addChild(Score);
 
             pickUpPrompt = new DisplayText(250, 10, "Press V to pick this item up", 12, 0, "LEFT", DisplayText.DefaultFont,0x303030);
             stage.addChild(pickUpPrompt)

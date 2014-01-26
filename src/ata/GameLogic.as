@@ -87,7 +87,6 @@ package ata
             levelList.push(new Level1());
             levelList.push(new Level2());
             setLevel(0);
-
         }
         
         public function clearEntities():void {
@@ -98,6 +97,8 @@ package ata
                 world.clearBubbles()
             }
             entities = new Vector.<Entity>();
+            stars = new Vector.<Star>();
+            effects = new Vector.<Effect>();
         }
         
         public function setLevel(n:uint):void {
@@ -116,8 +117,10 @@ package ata
             
             player = new Player(75, 0);
             addEntity(player);
-
-            var testObj = new CarryableObject(player.position.add(new Vector2(500, 0)), new BirdFly())
+            
+            // only do this on some levels
+            
+            var testObj:CarryableObject = new CarryableObject(player.position.add(new Vector2(500, 0)), new RSword(), new ISword());
             carryableObjects.push(testObj);
         }
 
@@ -210,6 +213,8 @@ package ata
                     if (input.isdown(Keyboard.V)) {
                         trace("qwerty")
                         obj.setPickedUp()
+                        player.swordImag.visible = true;
+                        player.swordReal.visible = true;
                     }
                 }
 
@@ -273,7 +278,7 @@ package ata
             this.x = -camera.x
             this.y = -camera.y
 
-            for each (var worldString in World.TYPES)
+            for each (var worldString:String in World.TYPES)
             {
                 worldMap[worldString].background.x = camera.x;
                 worldMap[worldString].background.y = camera.y;
@@ -288,14 +293,20 @@ package ata
         {
             for each (var entity:Entity in entities)
             {
+                
                 entity.update(input, dt, level);
                 
                 var worldString:String;
-                for each (worldString in World.TYPES)
+                if(entity.influencedBy[World.FORCE_REAL])
                 {
-                    entity.influencedBy[worldString] = false;
+                    entity.influencedBy[World.REALITY] = true;
                 }
-                
+                else
+                {
+                    entity.influencedBy[World.REALITY] = false;
+                }
+                entity.influencedBy[World.IMAGINATION] = false;
+                    
                 for each (var otherEntity:Entity in entities)
                 {
                     if (entity != otherEntity)
@@ -311,11 +322,11 @@ package ata
                 }
             }
             
-            if (player.influencedBy[World.REALITY])
+            if (player.influencedBy[World.REALITY] || player.influencedBy[World.FORCE_REAL])
             {
                 player.bubble.scaleModifier -= player.bubble.scaleModifier / 5
             }
-            else
+            else if(!player.influencedBy[World.REALITY])
             {
                 for each(var starEntity:Star in stars)
                 {
@@ -324,6 +335,7 @@ package ata
                         removeEntity(starEntity);
                         stars.splice(stars.indexOf(starEntity), 1);
                         numStars++;
+                        Main.Score.setText("Stars: " + numStars + "/" + Main.TOTAL_STARS);
                         
                         var explode:Effect = new Effect(new explosion(), new explosion(), 16);
                         explode.position.x = starEntity.position.x;
