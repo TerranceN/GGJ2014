@@ -13,7 +13,7 @@ package ata.levels
     public class Level1 extends Level
     {
         
-        private const movement:Number = 200;
+        private const movement:Number = 130;
         private var parentObj:Parent;
         private var firstStar:Star;
         
@@ -29,14 +29,15 @@ package ata.levels
             if (Math.abs(parentObj.position.x - GameLogic.instance.player.position.x) < movement*dt)
             {
                 parentObj.position.x = GameLogic.instance.player.position.x;
+                parentObj.speed.x = 0;
             }
             else if (parentObj.position.x < GameLogic.instance.player.position.x)
             {
-                parentObj.position.x += movement*dt;
+                parentObj.speed.x = movement;
             }
             else if (parentObj.position.x > GameLogic.instance.player.position.x)
             {
-                parentObj.position.x -= movement*dt;
+                parentObj.speed.x = -movement;
             }
         }
         
