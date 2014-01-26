@@ -20,3 +20,6 @@ sword: onground + swing animations
 bkg text for how to pick up
 
 can draw better sword
+
+move sword to right side of level 1, have bird in that area
+or new small area with low flying bird

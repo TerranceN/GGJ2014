@@ -291,6 +291,7 @@ package ata
                         removeEntity(starEntity);
                         stars.splice(stars.indexOf(starEntity), 1);
                         numStars++;
+                        Main.Score.setText("Stars: " + numStars + "/" + Main.TOTAL_STARS);
                         
                         var explode:Effect = new Effect(new explosion(), new explosion(), 16);
                         explode.position.x = starEntity.position.x;
