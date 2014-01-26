@@ -119,9 +119,10 @@ package ata
             addEntity(player);
             
             // only do this on some levels
-            
-            var testObj:CarryableObject = new CarryableObject(player.position.add(new Vector2(500, 0)), new RSword(), new ISword());
-            carryableObjects.push(testObj);
+            if (levelNum == 0) {
+                var testObj:CarryableObject = new CarryableObject(new Vector2(level.x2 - 700, player.position.y), new RSword(), new ISword());
+                carryableObjects.push(testObj);
+            }
         }
 
         public function update(dt:Number):void {
