@@ -12,7 +12,7 @@ package ata
     {
         private var isJumping:Boolean = true;
 
-        public var playerReal:DisplayObject;
+        public var playerReal:MovieClip;
         public var playerImag:MovieClip;
         private static const IMG_SCALE:Number = 0.7;
 
@@ -27,8 +27,8 @@ package ata
             this.x = x;
             this.y = y;
 
-            playerReal = new PlayeRealWalk();
-            playerImag = new PlayeRealWalk();
+            playerReal = new RPlayerWalk();
+            playerImag = new IPlayerWalk();
             playerReal.scaleY = playerImag.scaleY = playerReal.scaleX = playerImag.scaleX = IMG_SCALE;
             
             // for now, show player as always real to show walk animation
