@@ -101,12 +101,12 @@ package ata
         }
         
         public function getPointsInRange(start:Vector2, end:Vector2, step:Number):Array {
-            var diff = end.add(start.times(-1));
-            var segment = diff.normalize()
-            var length = diff.length()
-            var output = new Array()
+            var diff:Vector2 = end.add(start.times(-1));
+            var segment:Vector2 = diff.normalize()
+            var length:Number = diff.length()
+            var output:Array = new Array();
 
-            var lengthSoFar = 0
+            var lengthSoFar:Number = 0;
 
             while (lengthSoFar <= length) {
                 output.push(start.add(segment.times(lengthSoFar)))
@@ -117,14 +117,14 @@ package ata
         }
 
         public function findContactPoint(displayObject:DisplayObject, hit:Vector2, miss:Vector2):Vector2 {
-            var hitPoint = hit
-            var missPoint = miss
-            var length = 99999
+            var hitPoint:Vector2 = hit
+            var missPoint:Vector2 = miss
+            var length:Number = Number.MAX_VALUE;
 
             while(length > 0.1) {
-                var mid = missPoint.add(hitPoint.add(missPoint.times(-1)).times(0.5))
+                var mid:Vector2 = missPoint.add(hitPoint.add(missPoint.times(-1)).times(0.5))
 
-                var test = displayObject.hitTestPoint(mid.x, mid.y, true);
+                var test:Boolean = displayObject.hitTestPoint(mid.x, mid.y, true);
 
                 if (test) {
                     hitPoint = mid
@@ -132,26 +132,26 @@ package ata
                     missPoint = mid
                 }
 
-                var diff = hitPoint.add(missPoint.times(-1))
+                var diff:Vector2 = hitPoint.add(missPoint.times(-1))
                 length = diff.length()
             }
 
             return missPoint
         }
 
-        public function makeTypePointPair(type:String, points:Array) {
-            var dict = new Dictionary()
-            dict["type"] = type
-            dict["points"] = points
-            return dict
+        public function makeTypePointPair(type:String, points:Array):Dictionary {
+            var dict:Dictionary = new Dictionary();
+            dict["type"] = type;
+            dict["points"] = points;
+            return dict;
         }
 
         public function handleLevelCollision(dt:Number, displayObject:DisplayObject):Boolean {
             var result:Boolean = false;
             var diff:Vector2 = speed.times(dt)
 
-            var minWallWidth = 20
-            var wallPointStartHeight = 20
+            var minWallWidth:Number = 20
+            var wallPointStartHeight:Number = 20
 
             // this needs to be an array so we can define the order they are processed in
             var testPoints:Array = new Array(
@@ -184,7 +184,7 @@ package ata
             for each (var dict:Dictionary in testPoints) {
                 var key:String = dict["type"]
                 var pointList:Array = dict["points"];
-                var filteredDiff = new Vector2()
+                var filteredDiff:Vector2 = new Vector2()
 
                 if (key == "bottom_middle") {
                     if (diff.y > 0) {
@@ -224,11 +224,11 @@ package ata
 
                     var parentPosition:Vector2 = new Vector2(-GameLogic.camera.x, -GameLogic.camera.y);
                     var currentPosition:Vector2 = parentPosition.add(position.add(testPoint));
-                    var test = displayObject.hitTestPoint(currentPosition.x, currentPosition.y, true);
+                    var test:Boolean = displayObject.hitTestPoint(currentPosition.x, currentPosition.y, true);
 
                     if (test) {
-                        var movement = new Vector2()
-                        var move = new Vector2()
+                        var movement:Vector2 = new Vector2()
+                        var move:Vector2 = new Vector2()
 
                         if (key == "bottom_middle") {
                             move = new Vector2(0, -10);
@@ -246,11 +246,11 @@ package ata
                         }
 
                         while (test) {
-                            var test = displayObject.hitTestPoint(currentPosition.x + movement.x, currentPosition.y + movement.y, true);
+                            test = displayObject.hitTestPoint(currentPosition.x + movement.x, currentPosition.y + movement.y, true);
                             movement = movement.add(move)
                         }
 
-                        var contact = findContactPoint(displayObject, currentPosition, currentPosition.add(move))
+                        var contact:Vector2 = findContactPoint(displayObject, currentPosition, currentPosition.add(move))
                         position = contact.add(parentPosition.add(testPoint).times(-1))
                         x = position.x
                         y = position.y

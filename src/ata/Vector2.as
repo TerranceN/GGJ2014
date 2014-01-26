@@ -46,18 +46,18 @@ package ata
         }
 
         public function normalize():Vector2 {
-            var l = length()
+            var l:Number = length();
 
             if (l > 0) {
-                return new Vector2(x/l, y/l)
+                return new Vector2(x / l, y / l);
             } else {
-                return new Vector2()
+                return new Vector2();
             }
         }
 
         public function filterWith(filter:Vector2):Vector2 {
-            var newX = 0;
-            var newY = 0;
+            var newX:Number = 0;
+            var newY:Number = 0;
 
             if (x * filter.x > 0) {
                 newX = x;
