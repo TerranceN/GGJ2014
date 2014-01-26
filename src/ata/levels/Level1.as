@@ -4,8 +4,8 @@ package ata.levels
     import ata.Parent;
     import ata.Input;
     import ata.GameLogic;
-    import flash.display.DisplayObject;
     import flash.display.Shape;
+    import ata.Star;
 	/**
      * ...
      * @author Ryan
@@ -15,6 +15,7 @@ package ata.levels
         
         private const movement:Number = 200;
         private var parentObj:Parent;
+        private var firstStar:Star;
         
         public function Level1() 
         {
@@ -44,8 +45,13 @@ package ata.levels
             super.setupLevel(logic);
             
             parentObj = new Parent();
-            parentObj.position.x = 800;
+            parentObj.position.x = 300;
             logic.addEntity(parentObj);
+            
+            firstStar = new Star();
+            firstStar.position.x = 2050;
+            firstStar.position.y = -510;
+            logic.addEntity(firstStar);
         }
     }
 

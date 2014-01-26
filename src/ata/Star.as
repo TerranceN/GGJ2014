@@ -7,10 +7,10 @@ package ata
     public class Star extends Entity 
     {
         
-        public function Star(w:int, h:int) 
+        public function Star() 
         {
-            super(w, h);
-			addDisplay(World.IMAGINATION, 
+            super(170, 170);
+			addDisplay(World.IMAGINATION, new star());
         }
         
     }
