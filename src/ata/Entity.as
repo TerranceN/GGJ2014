@@ -190,6 +190,7 @@ package ata
         public function handleLevelCollision(dt:Number, displayObject:DisplayObject, collisionPoints:Array):Boolean {
             var result:Boolean = false;
             var diff:Vector2 = speed.times(dt)
+            var contact:Vector2
 
             for each (var dict:Dictionary in collisionPoints) {
                 var key:String = dict["type"]
@@ -261,14 +262,14 @@ package ata
                                 movement = movement.add(move)
                             }
 
-                            var contact:Vector2 = findContactPoint(displayObject, currentPosition, currentPosition.add(move))
+                            contact = findContactPoint(displayObject, currentPosition, currentPosition.add(move))
                             position = contact.add(parentPosition.add(testPoint).times(-1))
                             x = position.x
                             y = position.y
                         } else {
                             var points:Array = getPointsInRange(currentPosition.add(filteredDiff), currentPosition, MIN_WALL_WIDTH - 0.1)
 
-                            for (var i = points.length - 1; i >= 0; i--) {
+                            for (var i:int = points.length - 1; i >= 0; i--) {
                                 test = displayObject.hitTestPoint(points[i].x, points[i].y, true);
 
                                 if (test) {
@@ -283,7 +284,7 @@ package ata
                                         speed.y = 0
                                     }
 
-                                    var contact:Vector2 = findContactPoint(displayObject, currentPosition, points[i])
+                                    contact = findContactPoint(displayObject, currentPosition, points[i])
                                     position = contact.add(parentPosition.add(testPoint).times(-1))
                                     x = position.x
                                     y = position.y

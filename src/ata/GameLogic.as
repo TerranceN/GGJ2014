@@ -33,6 +33,8 @@ package ata
         private var player:Player;
 
         private var level:Level;
+        private var levelNum:int;
+        private var levelList:Vector.<Level>;
         
         private var entities:Vector.<Entity> = new Vector.<Entity>();
         
@@ -51,7 +53,15 @@ package ata
 
             addEventListener(Event.ENTER_FRAME, update);
             
-            level = new Level(new level1_reality(), new level1_reality_hitbox(), new level1_reality_platforms(), new level_1_imagination());
+            levelList = new Vector.<Level>();
+            levelList.push(new Level(new Scene1Real(), new Scene1RealHit(), new Sprite(), new Sprite()));
+            levelList.push(new Level(new level1_reality(), new level1_reality_hitbox(), new level1_reality_platforms(), new level_1_imagination()));
+            setLevel(1);
+        }
+        
+        public function setLevel(n:uint):void {
+            levelNum = n;
+            level = levelList[n];
             addEntity(level);
             
             player = new Player(w/2, h/2 - 100);
