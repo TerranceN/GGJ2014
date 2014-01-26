@@ -42,7 +42,7 @@ package ata
 			addDisplay(World.IMAGINATION, imag);
 		}
         
-        public function setupLevel(logic:GameLogic)
+        public function setupLevel(logic:GameLogic):void
         {
             
         }

@@ -57,6 +57,7 @@
     <element path="assets\parent.swc" />
     <element path="assets\playground.swc" />
     <element path="assets\bird.swc" />
+    <element path="assets\star.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

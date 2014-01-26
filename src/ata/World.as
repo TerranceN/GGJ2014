@@ -14,7 +14,7 @@ package ata
         public static const REALITY:String = "REALITY";
         public static const IMAGINATION:String = "IMAGINATION";
         
-        public static const grow_factor:Number = 0.1;
+        public static const grow_factor:Number = 0.2;
         
         public var display:Sprite;
         public var additiveMask:Sprite;

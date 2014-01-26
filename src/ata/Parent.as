@@ -9,11 +9,11 @@ package ata
         
         public function Parent() 
         {
-            super(67, 170);
+            super(0, 170);
 			
             addDisplay(World.REALITY, new parent_reality());
-            addRadialAdditiveMask(World.REALITY, 155);
-            addRadialSubtractiveMask(World.IMAGINATION, 280);
+            addRadialAdditiveMask(World.REALITY, 150);
+            addRadialSubtractiveMask(World.IMAGINATION, 275);
         }
         
     }

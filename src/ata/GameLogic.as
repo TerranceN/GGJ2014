@@ -210,9 +210,9 @@ package ata
             }
             if (player.influencedBy[World.REALITY])
             {
-                worldMap[World.REALITY].scaleAdditiveInfluence(4);
-                worldMap[World.REALITY].scaleSubtractiveInfluence(4);
-                worldMap[World.IMAGINATION].scaleSubtractiveInfluence(4);
+                worldMap[World.REALITY].scaleAdditiveInfluence(7);
+                worldMap[World.REALITY].scaleSubtractiveInfluence(7);
+                worldMap[World.IMAGINATION].scaleSubtractiveInfluence(7);
             }
             else
             {
