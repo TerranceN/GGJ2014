@@ -20,7 +20,7 @@ package ata.levels
         public function Level1() 
         {
             super(new playground_reality(), new playground_reality_hitbox(), new playground_reality_platforms(),
-                    new playground_imagination(), new playground_reality_hitbox(), new playground_imagination_platforms());
+                    new playground_imagination(), new playground_imagination_hitbox(), new playground_imagination_platforms());
         }
         
         
