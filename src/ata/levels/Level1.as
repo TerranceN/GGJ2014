@@ -45,12 +45,12 @@ package ata.levels
             super.setupLevel(logic);
             
             parentObj = new Parent();
-            parentObj.position.x = 300;
+            parentObj.position.x = 100;
             logic.addEntity(parentObj);
             
             firstStar = new Star();
             firstStar.position.x = 2050;
-            firstStar.position.y = -510;
+            firstStar.position.y = -310;
             logic.stars.push(firstStar);
             logic.addEntity(firstStar);
         }

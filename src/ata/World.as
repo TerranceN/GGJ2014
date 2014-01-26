@@ -4,6 +4,10 @@ package ata
     import flash.display.BlendMode;
     import flash.display.Sprite;
     import flash.events.Event;
+	import flash.geom.Matrix;
+	import flash.display.BitmapData;
+	import flash.display.Bitmap;
+    import flash.display.Shape;
 	/**
      * ...
      * @author Ryan
@@ -14,124 +18,131 @@ package ata
         public static const REALITY:String = "REALITY";
         public static const IMAGINATION:String = "IMAGINATION";
         public static const TYPES:Array = [World.REALITY, World.IMAGINATION];
+
+        private static const BUBBLE_RADIUS = 350
         
-        public static const grow_factor:Number = 0.2;
-        
-        public var display:Sprite;
-        public var additiveMask:Sprite;
-        public var subtractiveMask:Sprite;
-        
-        public var targetAdditiveScale:Number = 1;
-        public var currentAdditiveScale:Number = 1;
-        public var targetSubtractiveScale:Number = 1;
-        public var currentSubtractiveScale:Number = 1;
-        public var targetAlpha:Number = 1;
-        
+        public var maskBitmap = null;
+        public var inverseMaskBitmap = null;
+
+        private var maskData:BitmapData = null
+        private var inverseMaskData:BitmapData = null
+
+        private var additiveBubbles:Array = new Array()
+        private var subtractiveBubbles:Array = new Array();
+
+        [Embed(source="../../assets/mask.png")]
+		private var Mask:Class;
+        private var maskInstance
+
+        private var oldBitmap:Bitmap = null
+        private var oldBitmapInverse:Bitmap = null
+
+        public var background:Sprite = new Sprite()
+
         public function World() 
         {
-            display = new Sprite();
-            //display.cacheAsBitmap = true;
-            addChild(display);
-            additiveMask = new Sprite();
-            //additiveMask.cacheAsBitmap = true;
-            addChild(additiveMask);
-            subtractiveMask = new Sprite();
-            //subtractiveMask.cacheAsBitmap = true;
-            addChild(subtractiveMask);
-            
-            this.blendMode = BlendMode.LAYER;
-            display.mask = additiveMask;
-            subtractiveMask.blendMode = BlendMode.ALPHA;
-            
-            addEventListener(Event.ENTER_FRAME, doScale);
+            maskData = new BitmapData(GameLogic.instance.w, GameLogic.instance.h, true, 0x00FFFFFF);
+            inverseMaskData = new BitmapData(GameLogic.instance.w, GameLogic.instance.h, true, 0xFF000000)
+
+            maskBitmap = new Bitmap(maskData)
+            maskBitmap.cacheAsBitmap = true
+
+            inverseMaskBitmap = new Bitmap(inverseMaskData)
+            inverseMaskBitmap.cacheAsBitmap = true
+
+            maskInstance = new Mask();
+            this.cacheAsBitmap = true
+        }
+
+        public function clearBubbles() {
+            additiveBubbles = new Array()
+            subtractiveBubbles = new Array()
+
+            // this backround is needed for masking
+			background.graphics.beginFill(0xFFFFFFFE);
+			background.graphics.drawRect(0,0,GameLogic.instance.w,GameLogic.instance.h);
+            background.graphics.endFill()
+            addChild(background)
+        }
+
+        public function addAdditiveBubble(entity:Entity, scale:Number=NaN):EffectBubble {
+            var bubble:EffectBubble
+            if (isNaN(scale)) {
+                bubble = new EffectBubble(entity)
+            } else {
+                bubble = new EffectBubble(entity, scale)
+            }
+            additiveBubbles.push(bubble)
+            entity.addInfluence(World.IMAGINATION, bubble.scale * 2)
+            return bubble
+        }
+
+        public function addSubtractiveBubble(entity:Entity, scale:Number=NaN):EffectBubble {
+            var bubble:EffectBubble
+            if (isNaN(scale)) {
+                bubble = new EffectBubble(entity)
+            } else {
+                bubble = new EffectBubble(entity, scale)
+            }
+            subtractiveBubbles.push(bubble)
+            entity.addInfluence(World.REALITY, bubble.scale * 2)
+            return bubble
         }
         
-        public function scaleAdditiveInfluence(scale:Number):void
-        {
-            targetAdditiveScale = scale;
+        public function generateMasks():void {
+            maskData.fillRect(maskData.rect, 0x00FFFFFF);
+
+            for each (var bubble:EffectBubble in additiveBubbles) {
+                var matrix:Matrix = new Matrix()
+                var scale = bubble.scale * 2 / BUBBLE_RADIUS
+                matrix.scale(scale, scale)
+                matrix.translate(
+                    bubble.entity.position.x - GameLogic.camera.x - maskInstance.width * scale / 2,
+                    bubble.entity.position.y - GameLogic.camera.y - maskInstance.height * scale / 2 - bubble.entity.size.y * 3 / 4
+                )
+
+                maskData.draw(maskInstance, matrix, null, null, null, false)
+            }
+
+            for each (var bubble:EffectBubble in subtractiveBubbles) {
+                var matrix:Matrix = new Matrix()
+                var scale = bubble.scale * 2 / BUBBLE_RADIUS
+                matrix.scale(scale, scale)
+                matrix.translate(
+                    bubble.entity.position.x - GameLogic.camera.x - maskInstance.width * scale / 2,
+                    bubble.entity.position.y - GameLogic.camera.y - maskInstance.height * scale / 2 - bubble.entity.size.y * 3 / 4
+                )
+
+                maskData.draw(maskInstance, matrix, null, BlendMode.ERASE, null, false)
+            }
+
+            maskBitmap.x = GameLogic.camera.x
+            maskBitmap.y = GameLogic.camera.y
+
+            inverseMaskData.fillRect(inverseMaskData.rect, 0xFF000000)
+
+            inverseMaskData.draw(maskBitmap, null, null, BlendMode.ERASE, null, false)
+
+            inverseMaskBitmap.x = GameLogic.camera.x
+            inverseMaskBitmap.y = GameLogic.camera.y
         }
-        
-        public function scaleSubtractiveInfluence(scale:Number):void
-        {
-            targetSubtractiveScale = scale;
+
+        public function generateInverseMask() {
+            if (oldBitmapInverse != null && oldBitmapInverse.parent != null) {
+                oldBitmapInverse.parent.removeChild(oldBitmapInverse)
+            }
+
+            if (maskData == null) {
+                maskData = new BitmapData(GameLogic.instance.w, GameLogic.instance.h, true, 0x00FFFFFF);
+            } else {
+                maskData.fillRect(maskData.rect, 0);
+            }
+
+            var bitmap = new Bitmap(maskData)
+            oldBitmapInverse = bitmap
+            bitmap.cacheAsBitmap = true
+            return bitmap
         }
-        
-        public function fadeTo(alpha:Number):void
-        {
-            targetAlpha = alpha;
-        }
-        
-        public function doScale(e:Event):void
-        {
-            if (targetAdditiveScale > currentAdditiveScale)
-            {
-                currentAdditiveScale += grow_factor;
-            }
-            if (targetAdditiveScale < currentAdditiveScale)
-            {
-                currentAdditiveScale -= grow_factor;
-            }
-            
-            if (Math.abs(currentAdditiveScale-targetAdditiveScale) <= grow_factor)
-            {
-                currentAdditiveScale = targetAdditiveScale;
-            }
-            
-            if (targetSubtractiveScale > currentSubtractiveScale)
-            {
-                currentSubtractiveScale += grow_factor;
-            }
-            if (targetSubtractiveScale < currentSubtractiveScale)
-            {
-                currentSubtractiveScale -= grow_factor;
-            }
-            
-            if (Math.abs(currentSubtractiveScale-targetSubtractiveScale) <= grow_factor)
-            {
-                currentSubtractiveScale = targetSubtractiveScale;
-            }
-            
-            for (var i:uint=0; i<additiveMask.numChildren; i++){
-                additiveMask.getChildAt(i).scaleX = currentAdditiveScale;
-                additiveMask.getChildAt(i).scaleY = currentAdditiveScale;
-            }
-            
-            for (i=0; i<subtractiveMask.numChildren; i++){
-                subtractiveMask.getChildAt(i).scaleX = currentSubtractiveScale;
-                subtractiveMask.getChildAt(i).scaleY = currentSubtractiveScale;
-            }
-            
-            if (targetAlpha > display.alpha)
-            {
-                display.alpha += 0.03;
-            }
-            if (targetAlpha < display.alpha)
-            {
-                display.alpha -= 0.03;
-            }
-            
-            if (Math.abs(display.alpha-targetAlpha) <= 0.03)
-            {
-                display.alpha = targetAlpha;
-            }
-        }
-        
-        public function applyMask():void
-        {
-            if (display.mask == null)
-            {
-                display.mask = additiveMask;
-            }
-        }
-        
-        public function removeMask():void
-        {
-            if (display.mask != null)
-            {
-                display.mask = null;
-            }
-        }
-        
     }
 
 }
