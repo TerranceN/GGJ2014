@@ -109,7 +109,7 @@ package ata
             var lengthSoFar = 0
 
             while (lengthSoFar <= length) {
-                output.push(segment.times(lengthSoFar))
+                output.push(start.add(segment.times(lengthSoFar)))
                 lengthSoFar += step
             }
 
@@ -139,21 +139,73 @@ package ata
             return missPoint
         }
 
+        public function makeTypePointPair(type:String, points:Array) {
+            var dict = new Dictionary()
+            dict["type"] = type
+            dict["points"] = points
+            return dict
+        }
+
         public function handleLevelCollision(dt:Number, displayObject:DisplayObject):Boolean {
             var result:Boolean = false;
             var diff:Vector2 = speed.times(dt)
 
-            var testPoints:Dictionary = new Dictionary()
-            testPoints["bottom_middle"] = new Array(
-                new Vector2(0, 0)
+            var minWallWidth = 20
+            var wallPointStartHeight = 20
+
+            // this needs to be an array so we can define the order they are processed in
+            var testPoints:Array = new Array(
+                makeTypePointPair(
+                    "bottom_middle",
+                    new Array(new Vector2(0, 0))
+                ),
+                makeTypePointPair(
+                    "right",
+                    getPointsInRange(
+                        new Vector2(size.x / 2, -wallPointStartHeight),
+                        new Vector2(size.x / 2, -size.y),
+                        minWallWidth - 1
+                    )
+                ),
+                makeTypePointPair(
+                    "left",
+                    getPointsInRange(
+                        new Vector2(-size.x / 2, -wallPointStartHeight),
+                        new Vector2(-size.x / 2, -size.y),
+                        minWallWidth - 1
+                    )
+                ),
+                makeTypePointPair(
+                    "top_middle",
+                    new Array(new Vector2(0, -size.y))
+                )
             )
 
-            for (var key:Object in testPoints) {
-                var pointList:Array = testPoints[key];
+            for each (var dict:Dictionary in testPoints) {
+                var key:String = dict["type"]
+                var pointList:Array = dict["points"];
                 var filteredDiff = new Vector2()
 
                 if (key == "bottom_middle") {
                     if (diff.y > 0) {
+                        filteredDiff = new Vector2(0, diff.y)
+                    } else {
+                        filteredDiff = new Vector2()
+                    }
+                } else if (key == "right") {
+                    if (diff.x > 0) {
+                        filteredDiff = new Vector2(diff.x, 0)
+                    } else {
+                        filteredDiff = new Vector2()
+                    }
+                } else if (key == "left") {
+                    if (diff.x < 0) {
+                        filteredDiff = new Vector2(diff.x, 0)
+                    } else {
+                        filteredDiff = new Vector2()
+                    }
+                } else if (key == "top_middle") {
+                    if (diff.y < 0) {
                         filteredDiff = new Vector2(0, diff.y)
                     } else {
                         filteredDiff = new Vector2()
@@ -182,6 +234,15 @@ package ata
                             move = new Vector2(0, -10);
                             speed.y = 0
                             result = true;
+                        } else if (key == "right") {
+                            move = new Vector2(-10, 0)
+                            speed.x = 0;
+                        } else if (key == "left") {
+                            move = new Vector2(10, 0)
+                            speed.x = 0;
+                        } else if (key == "top_middle") {
+                            move = new Vector2(0, 10)
+                            speed.y = 0
                         }
 
                         while (test) {

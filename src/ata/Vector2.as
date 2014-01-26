@@ -45,7 +45,7 @@ package ata
             return x*x + y*y;
         }
 
-        public function normalizenormlaize():Vector2 {
+        public function normalize():Vector2 {
             var l = length()
 
             if (l > 0) {
