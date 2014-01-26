@@ -19,10 +19,10 @@ package ata
         public static const IMAGINATION:String = "IMAGINATION";
         public static const TYPES:Array = [World.REALITY, World.IMAGINATION];
 
-        private static const BUBBLE_RADIUS = 350
+        private static const BUBBLE_RADIUS:Number = 350
         
-        public var maskBitmap = null;
-        public var inverseMaskBitmap = null;
+        public var maskBitmap:Bitmap = null;
+        public var inverseMaskBitmap:Bitmap = null;
 
         private var maskData:BitmapData = null
         private var inverseMaskData:BitmapData = null
@@ -32,7 +32,7 @@ package ata
 
         [Embed(source="../../assets/mask.png")]
 		private var Mask:Class;
-        private var maskInstance
+        private var maskInstance:Mask;
 
         private var oldBitmap:Bitmap = null
         private var oldBitmapInverse:Bitmap = null

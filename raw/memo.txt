@@ -18,3 +18,5 @@ parent order layering
 
 sword: onground + swing animations
 bkg text for how to pick up
+
+can draw better sword

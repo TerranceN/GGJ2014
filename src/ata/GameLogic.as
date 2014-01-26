@@ -114,8 +114,10 @@ package ata
             
             player = new Player(75, 0);
             addEntity(player);
-
-            var testObj = new CarryableObject(player.position.add(new Vector2(500, 0)), new BirdFly())
+            
+            // only do this on some levels
+            
+            var testObj:CarryableObject = new CarryableObject(player.position.add(new Vector2(500, 0)), new RSword(), new ISword());
             carryableObjects.push(testObj);
         }
 
@@ -231,7 +233,7 @@ package ata
             this.x = -camera.x
             this.y = -camera.y
 
-            for each (var worldString in World.TYPES)
+            for each (var worldString:String in World.TYPES)
             {
                 worldMap[worldString].background.x = camera.x;
                 worldMap[worldString].background.y = camera.y;
