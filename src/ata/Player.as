@@ -76,8 +76,14 @@ package ata
                 playerImag.gotoAndStop(WALK_FRAME);                
             }
 
-            var hitGround:Boolean = handleLevelCollision(dt, level.realityCollision, mainCollisionPoints())
-            hitGround = hitGround || handleLevelCollision(dt, level.realityPlatforms, platformCollisionPoints())
+            var hitGround:Boolean;
+            if (influencedBy[World.REALITY]) {
+                hitGround = handleLevelCollision(dt, level.realityCollision, mainCollisionPoints())
+                hitGround = hitGround || handleLevelCollision(dt, level.realityPlatforms, platformCollisionPoints())
+            }    else if (influencedBy[World.IMAGINATION]) {
+                hitGround = handleLevelCollision(dt, level.realityCollision, mainCollisionPoints())
+                hitGround = hitGround || handleLevelCollision(dt, level.realityPlatforms, platformCollisionPoints())
+            }
 
             if (hitGround) {
                 isJumping = false;
