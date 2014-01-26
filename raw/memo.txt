@@ -11,3 +11,5 @@ add some introduction information (minimal: hotkeys indicated as needed)
 doodad ojects/decorations/clouds
 
 kill bird / fire bird enemy
+
+player new face / details (hair)

@@ -133,12 +133,12 @@ package ata
                 {
                     overtime = overtime - T;
                     fixedupdate(T);
-                    input.update(T);
                     if (input.justpressed(Keyboard.Q) || input.justpressed(Keyboard.ESCAPE)) {
                         fscommand("quit");
                     } else if (input.justpressed(Keyboard.R)) {
                         // Reset scene to initial state
                     }
+                    input.update(T); // note: this will change justpressed to false for all keys, input dependant logic should happen before this
                 }
                 draw();
             }
