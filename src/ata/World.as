@@ -29,10 +29,13 @@ package ata
         public function World() 
         {
             display = new Sprite();
+            //display.cacheAsBitmap = true;
             addChild(display);
             additiveMask = new Sprite();
+            //additiveMask.cacheAsBitmap = true;
             addChild(additiveMask);
             subtractiveMask = new Sprite();
+            //subtractiveMask.cacheAsBitmap = true;
             addChild(subtractiveMask);
             
             this.blendMode = BlendMode.LAYER;
@@ -42,12 +45,12 @@ package ata
             addEventListener(Event.ENTER_FRAME, doScale);
         }
         
-        public function scaleSubtractiveInfluence(scale:Number):void
+        public function scaleAdditiveInfluence(scale:Number):void
         {
             targetAdditiveScale = scale;
         }
         
-        public function scaleAdditiveInfluence(scale:Number):void
+        public function scaleSubtractiveInfluence(scale:Number):void
         {
             targetSubtractiveScale = scale;
         }
@@ -99,14 +102,14 @@ package ata
             
             if (targetAlpha > display.alpha)
             {
-                display.alpha += 0.01;
+                display.alpha += 0.03;
             }
             if (targetAlpha < display.alpha)
             {
-                display.alpha -= 0.01;
+                display.alpha -= 0.03;
             }
             
-            if (Math.abs(display.alpha-targetAlpha) <= 0.01)
+            if (Math.abs(display.alpha-targetAlpha) <= 0.03)
             {
                 display.alpha = targetAlpha;
             }

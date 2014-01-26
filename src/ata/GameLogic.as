@@ -219,13 +219,11 @@ package ata
             {
                 worldMap[World.REALITY].scaleAdditiveInfluence(4);
                 worldMap[World.REALITY].scaleSubtractiveInfluence(4);
-                worldMap[World.REALITY].fadeTo(1);
             }
             else
             {
                 worldMap[World.REALITY].scaleAdditiveInfluence(1);
                 worldMap[World.REALITY].scaleSubtractiveInfluence(1);
-                worldMap[World.REALITY].fadeTo(0.8);
             }
             updateCamera(dt);
         }

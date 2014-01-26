@@ -100,6 +100,12 @@ package ata
             additiveMask.graphics.drawCircle(-this.size.x/2, -this.size.y/2, radius);
             additiveMask.graphics.endFill();
             addAdditiveMask(world, additiveMask);
+            
+            var influence:Sprite = new Sprite();
+            influence.graphics.beginFill(0x000000,0.05);
+            influence.graphics.drawCircle(-this.size.x/2, -this.size.y/2, radius);
+            influence.graphics.endFill();
+            addDisplay(World.REALITY,influence);
             addInfluence(world, radius);
         }
         
