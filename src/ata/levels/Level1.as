@@ -55,13 +55,13 @@ package ata.levels
             logic.stars.push(firstStar);
             logic.addEntity(firstStar);
 
-            var height = -300;
+            var height = -250;
 
-            bird = new Bird(0, height);
+            bird = new Bird(x2 - 1000, height);
             logic.addEntity(bird)
 
-            birdX1 = 750
-            birdX2 = 1000;
+            birdX1 = x2 - 1200;
+            birdX2 = x2 - 700;
             
             var nextStar:Star = new Star();
             nextStar.position.x = 350;
