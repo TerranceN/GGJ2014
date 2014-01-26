@@ -50,6 +50,7 @@ package ata.levels
             firstStar = new Star();
             firstStar.position.x = 2050;
             firstStar.position.y = -510;
+            logic.stars.push(firstStar);
             logic.addEntity(firstStar);
         }
     }

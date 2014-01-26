@@ -11,6 +11,7 @@ package ata
     public class Player extends Entity
     {
         private var isJumping:Boolean = true;
+        private var freeFell:Boolean = false;
 
         public var playerReal:MovieClip;
         public var playerImag:MovieClip;
@@ -75,6 +76,7 @@ package ata
             if (input.isdown(Keyboard.SPACE) && !isJumping) {
                 speed.y = -JUMP;
                 isJumping = true;
+                freeFell = false;
             }
 
             if (input.isdown(Keyboard.A) || input.isdown(Keyboard.LEFT)) {
@@ -102,18 +104,24 @@ package ata
             }
 
             var hitGround:Boolean;
+            var hitPlatform:Boolean;
             if (influencedBy[World.REALITY]) {
                 hitGround = handleLevelCollision(dt, level.realityCollision, mainCollisionPoints())
-                hitGround = hitGround || handleLevelCollision(dt, level.realityPlatforms, platformCollisionPoints())
+                hitPlatform = handleLevelCollision(dt, level.realityPlatforms, platformCollisionPoints())
             }    else if (influencedBy[World.IMAGINATION]) {
                 hitGround = handleLevelCollision(dt, level.realityCollision, mainCollisionPoints())
-                hitGround = hitGround || handleLevelCollision(dt, level.realityPlatforms, platformCollisionPoints())
+                hitPlatform = handleLevelCollision(dt, level.realityPlatforms, platformCollisionPoints())
             }
 
-            if (hitGround) {
+            if (hitGround || hitPlatform) {
                 isJumping = false;
             }
-
+            
+            if (speed.y > 1 && !hitPlatform)
+            {
+                freeFell = true;
+            }
+            
             super.update(input, dt, level);
             
             if (position.x < level.x1) {

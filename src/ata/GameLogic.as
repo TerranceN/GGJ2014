@@ -44,6 +44,7 @@ package ata
         private var levelList:Vector.<Level>;
         
         private var entities:Vector.<Entity> = new Vector.<Entity>();
+        public var stars:Vector.<Star> = new Vector.<Star>();
         
         private static var worldMap:Object = {}; // STRING -> WORLD
 
@@ -219,7 +220,16 @@ package ata
                 worldMap[World.REALITY].scaleAdditiveInfluence(1);
                 worldMap[World.REALITY].scaleSubtractiveInfluence(1);
                 worldMap[World.IMAGINATION].scaleSubtractiveInfluence(1);
+                
+                for each(var starEntity:Star in stars)
+                {
+                    if (player.position.diff(starEntity.position) < player.size.length() + starEntity.size.length())
+                    {
+                        trace("star")
+                    }
+                }
             }
+            
             updateCamera(dt);
         }
         
@@ -270,6 +280,47 @@ package ata
                 for each (displayObject in displayObjects)
                 {
                     world.subtractiveMask.addChild(displayObject);
+                }
+            }
+        }
+        
+        public function removeEntity(e:Entity):void
+        {
+            var world:World;
+            var worldString:String;
+            var displayObjects:Vector.<DisplayObject>;
+            var displayObject:DisplayObject;
+            entities.splice(entities.indexOf(e),1);
+            for (worldString in e.displayObjects)
+            {
+                makeWorldIfNotExists(worldString);
+                world = worldMap[worldString];
+                displayObjects = e.displayObjects[worldString];
+                for each (displayObject in displayObjects)
+                {
+                    world.display.removeChild(displayObject);
+                }
+            }
+            
+            for (worldString in e.additiveMasks)
+            {
+                makeWorldIfNotExists(worldString);
+                world = worldMap[worldString];
+                displayObjects = e.additiveMasks[worldString];
+                for each (displayObject in displayObjects)
+                {
+                    world.additiveMask.removeChild(displayObject);
+                }
+            }
+            
+            for (worldString in e.subtractiveMasks)
+            {
+                makeWorldIfNotExists(worldString);
+                world = worldMap[worldString];
+                displayObjects = e.subtractiveMasks[worldString];
+                for each (displayObject in displayObjects)
+                {
+                    world.subtractiveMask.removeChild(displayObject);
                 }
             }
         }
