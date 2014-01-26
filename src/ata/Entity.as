@@ -17,6 +17,7 @@ package ata
 		public var speed:Vector2;
 		public var position:Vector2;
         public var testPosition:Sprite;
+        public static const MIN_WALL_WIDTH:Number = 20
         
         //MAP STRING -> DISPLAY OBJECT
         public var displayObjects:Object = {};
@@ -147,7 +148,6 @@ package ata
         }
 
         public function mainCollisionPoints():Array {
-            var minWallWidth:Number = 20
             var wallPointStartHeight:Number = 20
 
             return new Array(
@@ -160,7 +160,7 @@ package ata
                     getPointsInRange(
                         new Vector2(size.x / 2, -wallPointStartHeight),
                         new Vector2(size.x / 2, -size.y),
-                        minWallWidth - 1
+                        MIN_WALL_WIDTH - 0.1
                     )
                 ),
                 makeTypePointPair(
@@ -168,7 +168,7 @@ package ata
                     getPointsInRange(
                         new Vector2(-size.x / 2, -wallPointStartHeight),
                         new Vector2(-size.x / 2, -size.y),
-                        minWallWidth - 1
+                        MIN_WALL_WIDTH - 0.1
                     )
                 ),
                 makeTypePointPair(
@@ -197,32 +197,32 @@ package ata
                 var filteredDiff:Vector2 = new Vector2()
 
                 if (key == "bottom_middle") {
-                    if (diff.y > 0) {
+                    if (diff.y >= 0) {
                         filteredDiff = new Vector2(0, diff.y)
                     } else {
-                        filteredDiff = new Vector2()
+                        filteredDiff = null
                     }
                 } else if (key == "right") {
-                    if (diff.x > 0) {
+                    if (diff.x >= 0) {
                         filteredDiff = new Vector2(diff.x, 0)
                     } else {
-                        filteredDiff = new Vector2()
+                        filteredDiff = null
                     }
                 } else if (key == "left") {
-                    if (diff.x < 0) {
+                    if (diff.x <= 0) {
                         filteredDiff = new Vector2(diff.x, 0)
                     } else {
-                        filteredDiff = new Vector2()
+                        filteredDiff = null
                     }
                 } else if (key == "top_middle") {
-                    if (diff.y < 0) {
+                    if (diff.y <= 0) {
                         filteredDiff = new Vector2(0, diff.y)
                     } else {
-                        filteredDiff = new Vector2()
+                        filteredDiff = null
                     }
                 }
 
-                if (filteredDiff.lengthSquared() > 0) {
+                if (filteredDiff != null) {
                     for each (var testPoint:Vector2 in pointList) {
                         // if hitting at current location
                             // find point where not hitting
@@ -266,7 +266,31 @@ package ata
                             x = position.x
                             y = position.y
                         } else {
-                        
+                            var points:Array = getPointsInRange(currentPosition.add(filteredDiff), currentPosition, MIN_WALL_WIDTH - 0.1)
+
+                            for (var i = points.length - 1; i >= 0; i--) {
+                                test = displayObject.hitTestPoint(points[i].x, points[i].y, true);
+
+                                if (test) {
+                                    if (key == "bottom_middle") {
+                                        speed.y = 0
+                                        result = true;
+                                    } else if (key == "right") {
+                                        speed.x = 0;
+                                    } else if (key == "left") {
+                                        speed.x = 0;
+                                    } else if (key == "top_middle") {
+                                        speed.y = 0
+                                    }
+
+                                    var contact:Vector2 = findContactPoint(displayObject, currentPosition, points[i])
+                                    position = contact.add(parentPosition.add(testPoint).times(-1))
+                                    x = position.x
+                                    y = position.y
+
+                                    break
+                                }
+                            }
                         }
                     }
                 }
