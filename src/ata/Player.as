@@ -10,12 +10,15 @@ package ata
      */
     public class Player extends Entity
     {
-        private var isJumping:Boolean = true;
+        public var isJumping:Boolean = true;
         private var freeFell:Boolean = false;
 
         public var playerReal:MovieClip;
         public var playerImag:MovieClip;
         public var bubble:EffectBubble = null;
+
+        public var swinging:Boolean = false;
+
         private static const IMG_SCALE:Number = 0.7;
 
         private static const MAX_SPEED_REAL:Number = 150;
@@ -35,6 +38,8 @@ package ata
         
         private static const IDLE_FRAME:uint = 1;
         private static const WALK_FRAME:uint = 2;
+
+        public const SWING_TIME:Number = 1000
         
         public function Player(x:int, y:int) {
             super(40*IMG_SCALE, 130*IMG_SCALE);
@@ -74,22 +79,28 @@ package ata
             
             speed.y += GRAVITY * dt;
 
-            if (input.isdown(Keyboard.SPACE) && !isJumping) {
-                speed.y = -JUMP;
-                isJumping = true;
-                freeFell = false;
-            }
+            if (!swinging) {
+                if (input.isdown(Keyboard.SPACE) && !isJumping) {
+                    speed.y = -JUMP;
+                    isJumping = true;
+                    freeFell = false;
+                }
 
-            if (input.isdown(Keyboard.A) || input.isdown(Keyboard.LEFT)) {
-                speed.x = Math.max(-MAX_SPEED, speed.x - ACCEL * dt);
-            } else if (speed.x < 0) {
+                if (input.isdown(Keyboard.A) || input.isdown(Keyboard.LEFT)) {
+                    speed.x = Math.max(-MAX_SPEED, speed.x - ACCEL * dt);
+                } else if (speed.x < 0) {
+                    speed.x = Math.min(0, speed.x + DECEL * dt);
+                }
+                if (input.isdown(Keyboard.D) || input.isdown(Keyboard.RIGHT)) {
+                    speed.x = Math.min(MAX_SPEED, speed.x + ACCEL * dt);
+                } else if (speed.x > 0) {
+                    speed.x = Math.max(0, speed.x - DECEL * dt);
+                }
+            } else {
                 speed.x = Math.min(0, speed.x + DECEL * dt);
-            }
-            if (input.isdown(Keyboard.D) || input.isdown(Keyboard.RIGHT)) {
-                speed.x = Math.min(MAX_SPEED, speed.x + ACCEL * dt);
-            } else if (speed.x > 0) {
                 speed.x = Math.max(0, speed.x - DECEL * dt);
             }
+
             if (speed.x < 0) {
                 playerReal.scaleX = playerImag.scaleX = -IMG_SCALE;
             } else if (speed.x > 0) {
@@ -114,9 +125,7 @@ package ata
                 hitPlatform = handleLevelCollision(dt, level.imaginationPlatforms, platformCollisionPoints())
             }
 
-            if (hitGround || hitPlatform) {
-                isJumping = false;
-            }
+            isJumping = !(hitGround || hitPlatform);
             
             if (speed.y > 1 && !hitPlatform)
             {

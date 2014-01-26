@@ -36,10 +36,20 @@ package ata
             addDisplay(World.IMAGINATION, imgImag);
         }
 
+        public function remove() {
+            imgReal.parent.removeChild(imgReal)
+            imgImag.parent.removeChild(imgImag)
+
+            imgReal.visible = false
+            imgImag.visible = false
+
+            this.visible = false
+        }
+
         override public function update(input:Input, dt:Number, level:Level):void {
-            if (position.x > level.x2) {
+            if (position.x > level.birdX2) {
                 speed.x = -SPEED;
-            } else if (position.x < level.x1) {
+            } else if (position.x < level.birdX1) {
                 speed.x = SPEED;
             }
 

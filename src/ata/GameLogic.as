@@ -13,6 +13,8 @@ package ata
 	import flash.display.BitmapData;
 	import flash.display.Bitmap;
     import flash.display.Shape;
+    import flash.utils.Timer;
+    import flash.events.TimerEvent;
     /**
      * ...
      * @author Matthew Hyndman
@@ -150,6 +152,48 @@ package ata
                     input.update(T); // note: this will change justpressed to false for all keys, input dependant logic should happen before this
                 }
                 draw();
+            }
+
+            if (!player.swinging && !player.isJumping && input.isdown(Keyboard.SHIFT)) {
+                trace("swing!")
+                player.swinging = true
+                // play swing animation
+
+                var timer:Timer = new Timer(player.SWING_TIME);
+                timer.addEventListener(TimerEvent.TIMER, function whenDone():void {
+                    timer.removeEventListener(TimerEvent.TIMER, whenDone)
+                    player.swinging = false
+                    trace("swing done!")
+                });
+                timer.start();
+
+                var attackTimer:Timer = new Timer(player.SWING_TIME / 2);
+                attackTimer.addEventListener(TimerEvent.TIMER, function attack():void {
+                    attackTimer.removeEventListener(TimerEvent.TIMER, attack)
+
+                    var hitbox = player.playerImag.getBounds(worldMap[World.IMAGINATION])
+
+                    if (!player.influencedBy[World.REALITY]) {
+                        for each(var e:Entity in entities) {
+                            if (e is Bird) {
+                                trace(hitbox)
+                                trace(Bird(e).imgImag.getBounds(worldMap[World.IMAGINATION]))
+                                if (hitbox.intersects(Bird(e).imgImag.getBounds(worldMap[World.IMAGINATION]))) {
+                                    Bird(e).remove()
+                                    entities.splice(entities.indexOf(e), 1)
+
+                                    var explode:Effect = new Effect(new explosion(), new explosion(), 16);
+                                    explode.position.x = e.position.x;
+                                    explode.position.y = e.position.y;
+                                    effects.push(explode);
+                                    addEntity(explode);
+                                }
+                            }
+                        }
+                    }
+                });
+                attackTimer.start();
+
             }
 
             for each(var obj:CarryableObject in carryableObjects) {

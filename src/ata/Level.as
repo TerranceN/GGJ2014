@@ -19,6 +19,9 @@ package ata
 		
         public var x1:int;
         public var x2:int;
+
+        public var birdX1:int;
+        public var birdX2:int;
         
         //, imagDeath:DisplayObject
 		public function Level(real:DisplayObject, realHit:DisplayObject, realPlat:DisplayObject, imag:DisplayObject, imagHit:DisplayObject, imagPlat:DisplayObject) 

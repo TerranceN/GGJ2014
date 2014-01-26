@@ -6,6 +6,8 @@ package ata.levels
     import ata.GameLogic;
     import flash.display.Shape;
     import ata.Star;
+    import ata.Bird;
+    import ata.Vector2;
 	/**
      * ...
      * @author Ryan
@@ -16,6 +18,7 @@ package ata.levels
         private const movement:Number = 130;
         private var parentObj:Parent;
         private var firstStar:Star;
+        private var bird:Bird
         
         public function Level1() 
         {
@@ -51,6 +54,14 @@ package ata.levels
             firstStar.position.y = -310;
             logic.stars.push(firstStar);
             logic.addEntity(firstStar);
+
+            var height = -300;
+
+            bird = new Bird(0, height);
+            logic.addEntity(bird)
+
+            birdX1 = 750
+            birdX2 = 1000;
         }
     }
 
