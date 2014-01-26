@@ -8,11 +8,17 @@ package ata
     public class Effect extends Entity 
     {
         public var timeLeft:int;
-        public function Effect(d:DisplayObject, time:int) 
+        public function Effect(real:DisplayObject, imag:DisplayObject, time:int) 
         {
-            super(d.width, d.height);
-			addDisplay(World.REALITY, d);
-			addDisplay(World.IMAGINATION, d);
+            super(real.width, real.height);
+            if (real)
+            {
+			    addDisplay(World.REALITY, real);
+            }
+            if (imag)
+            {
+			    addDisplay(World.IMAGINATION, imag);
+            }
             timeLeft = time;
         }
         
