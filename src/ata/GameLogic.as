@@ -1,6 +1,6 @@
 package ata 
 {
-    import ata.levels.Level1;
+    import ata.levels.*;
     import flash.display.BlendMode;
     import flash.display.DisplayObject;
     import flash.display.MovieClip;
@@ -53,8 +53,7 @@ package ata
         public static var worldMap:Object = {};
 
         public static var numStars:int = 0;
-
-        private var cameraOffset:Vector2 = new Vector2(400, 300);
+        private var cameraOffset:Vector2 = new Vector2(400, 350);
         private var cameraVelocity:Vector2 = new Vector2(0, 0);
         public static var camera:Vector2 = new Vector2(0, 0);
         
@@ -83,6 +82,7 @@ package ata
 
             levelList = new Vector.<Level>();
             levelList.push(new Level1());
+            levelList.push(new Level2());
             setLevel(0);
         }
         
@@ -108,7 +108,7 @@ package ata
             
             level.setupLevel(this);
             
-            addEntity(new Bird(w / 3, - h / 4));
+            //addEntity(new Bird(w / 3, - h / 4));
             
             player = new Player(75, 0);
             addEntity(player);
@@ -152,9 +152,8 @@ package ata
                 effect.timeLeft --;
                 if (effect.timeLeft <= 0)
                 {
-                    trace("remove");
-                    //removeEntity(effect);
-                    //effects.splice(effects.indexOf(effect), 1);
+                    removeEntity(effect);
+                    effects.splice(effects.indexOf(effect), 1);
                 }
             }
         }
@@ -163,7 +162,7 @@ package ata
         {
             camera.x += cameraVelocity.x * dt;
             camera.y += cameraVelocity.y * dt;
-            camera.x = Math.max(level.x1, Math.min(camera.x,level.x2));
+            camera.x = Math.max(level.x1, Math.min(camera.x,level.x2-this.w-50));
 
             var cameraVelocityDelta:Vector2 = new Vector2(0,0);
             var nextCameraVelocityDelta:Vector2 = new Vector2(0,0);
@@ -255,7 +254,7 @@ package ata
                         stars.splice(stars.indexOf(starEntity), 1);
                         numStars++;
                         
-                        var explode:Effect = new Effect(new explosion(), 16);
+                        var explode:Effect = new Effect(new explosion(), new explosion(), 16);
                         explode.position.x = starEntity.position.x;
                         explode.position.y = starEntity.position.y;
                         effects.push(explode);
