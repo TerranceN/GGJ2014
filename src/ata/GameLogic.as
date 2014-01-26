@@ -85,7 +85,6 @@ package ata
             levelList.push(new Level1());
             levelList.push(new Level2());
             setLevel(0);
-
         }
         
         public function clearEntities():void {
@@ -96,6 +95,8 @@ package ata
                 world.clearBubbles()
             }
             entities = new Vector.<Entity>();
+            stars = new Vector.<Star>();
+            effects = new Vector.<Effect>();
         }
         
         public function setLevel(n:uint):void {
@@ -248,14 +249,20 @@ package ata
         {
             for each (var entity:Entity in entities)
             {
+                
                 entity.update(input, dt, level);
                 
                 var worldString:String;
-                for each (worldString in World.TYPES)
+                if(entity.influencedBy[World.FORCE_REAL])
                 {
-                    entity.influencedBy[worldString] = false;
+                    entity.influencedBy[World.REALITY] = true;
                 }
-                
+                else
+                {
+                    entity.influencedBy[World.REALITY] = false;
+                }
+                entity.influencedBy[World.IMAGINATION] = false;
+                    
                 for each (var otherEntity:Entity in entities)
                 {
                     if (entity != otherEntity)
@@ -271,11 +278,11 @@ package ata
                 }
             }
             
-            if (player.influencedBy[World.REALITY])
+            if (player.influencedBy[World.REALITY] || player.influencedBy[World.FORCE_REAL])
             {
                 player.bubble.scaleModifier -= player.bubble.scaleModifier / 5
             }
-            else
+            else if(!player.influencedBy[World.REALITY])
             {
                 for each(var starEntity:Star in stars)
                 {

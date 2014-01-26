@@ -16,6 +16,7 @@ package ata
     {
         
         public static const REALITY:String = "REALITY";
+        public static const FORCE_REAL:String = "FORCE_REAL";
         public static const IMAGINATION:String = "IMAGINATION";
         public static const TYPES:Array = [World.REALITY, World.IMAGINATION];
 
