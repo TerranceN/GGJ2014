@@ -120,6 +120,8 @@ package ata
                 if (interval > 0.5) {
                     var framerate:int = int(framecount / interval);//1 / dt;
                     Main.FPS.setText("FPS: " + framerate);
+                    interval -= 0.5;
+                    framecount = 0;
                 }
             }
             

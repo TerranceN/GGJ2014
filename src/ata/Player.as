@@ -12,7 +12,7 @@ package ata
     {
         private var isJumping:Boolean = true;
 
-        public var playerReal:DisplayObject;
+        public var playerReal:MovieClip;
         public var playerImag:MovieClip;
         private static const IMG_SCALE:Number = 0.7;
 
@@ -31,14 +31,20 @@ package ata
         private static var DECEL:Number = 600;
         private static var JUMP:Number = 450;
         
+        private static const IDLE_FRAME:uint = 1;
+        private static const WALK_FRAME:uint = 2;
+        
         public function Player(x:int, y:int) {
             super(40*IMG_SCALE, 130*IMG_SCALE);
             this.position = new Vector2(x, y);
             this.x = x;
             this.y = y;
 
-            playerReal = new PlayeRealWalk();
-            playerImag = new PlayeRealWalk();
+            playerReal = new RPlayer();
+            playerImag = new IPlayer();
+            playerReal.gotoAndStop(IDLE_FRAME);
+            playerImag.gotoAndStop(IDLE_FRAME);
+            
             playerReal.scaleY = playerImag.scaleY = playerReal.scaleX = playerImag.scaleX = IMG_SCALE;
             
             // for now, show player as always real to show walk animation
@@ -85,6 +91,14 @@ package ata
                 playerReal.scaleX = playerImag.scaleX = -IMG_SCALE;
             } else if (speed.x > 0) {
                 playerReal.scaleX = playerImag.scaleX = IMG_SCALE;
+            }
+            
+            if (Math.abs(speed.x) < 100) {
+                playerReal.gotoAndStop(IDLE_FRAME);
+                playerImag.gotoAndStop(IDLE_FRAME);                
+            } else {
+                playerReal.gotoAndStop(WALK_FRAME);
+                playerImag.gotoAndStop(WALK_FRAME);                
             }
 
             var hitGround:Boolean = handleLevelCollision(dt, level.realityCollision, mainCollisionPoints())
