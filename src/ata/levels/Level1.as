@@ -47,10 +47,34 @@ package ata.levels
             logic.addEntity(parentObj);
             
             firstStar = new Star();
-            firstStar.position.x = 2050;
+            firstStar.position.x = 2250;
             firstStar.position.y = -310;
             logic.stars.push(firstStar);
             logic.addEntity(firstStar);
+            
+            var nextStar:Star = new Star();
+            nextStar.position.x = 350;
+            nextStar.position.y = -500;
+            logic.stars.push(nextStar);
+            logic.addEntity(nextStar);
+            
+            nextStar = new Star();
+            nextStar.position.x = 1200;
+            nextStar.position.y = -500;
+            logic.stars.push(nextStar);
+            logic.addEntity(nextStar);
+            
+            nextStar = new Star();
+            nextStar.position.x = 1300;
+            nextStar.position.y = -500;
+            logic.stars.push(nextStar);
+            logic.addEntity(nextStar);
+            
+            nextStar = new Star();
+            nextStar.position.x = 1270;
+            nextStar.position.y = -100;
+            logic.stars.push(nextStar);
+            logic.addEntity(nextStar);
         }
     }
 
