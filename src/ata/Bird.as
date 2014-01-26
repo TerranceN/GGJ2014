@@ -13,11 +13,12 @@ package ata
 
         public var imgReal:MovieClip;
         public var imgImag:MovieClip;
-        private static const IMG_SCALE:Number = 0.7;
+        private static const REAL_SCALE:Number = 0.7;
+        private static const IMAG_SCALE:Number = 1.3;
         private static const SPEED:Number = 150;
         
         public function Bird(x:int, y:int) {
-            super(40*IMG_SCALE, 40*IMG_SCALE);
+            super(40*IMAG_SCALE, 40*IMAG_SCALE);
             this.position = new Vector2(x, y);
             speed.x = SPEED;
             this.x = x;
@@ -25,8 +26,8 @@ package ata
 
             imgReal = new BirdFly();
             imgImag = new BirdFly();
-            imgReal.scaleY = imgImag.scaleY = imgReal.scaleX = imgImag.scaleX = IMG_SCALE;
-            
+            imgReal.scaleY = imgReal.scaleX = REAL_SCALE;
+            imgImag.scaleY = imgImag.scaleX = IMAG_SCALE;
             // for now, show player as always real to show walk animation
             addDisplay(World.REALITY, imgReal);
             addDisplay(World.IMAGINATION, imgImag);
@@ -40,9 +41,11 @@ package ata
             }
 
             if (speed.x < 0) {
-                imgReal.scaleX = imgImag.scaleX = IMG_SCALE;
+                imgReal.scaleX = REAL_SCALE;
+                imgImag.scaleX = IMAG_SCALE;
             } else if (speed.x > 0) {
-                imgReal.scaleX = imgImag.scaleX = -IMG_SCALE;
+                imgReal.scaleX = -REAL_SCALE;
+                imgImag.scaleX = -IMAG_SCALE;
             }
             
             super.update(input, dt, level);
