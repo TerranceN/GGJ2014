@@ -157,10 +157,14 @@ package ata
                 draw();
             }
 
-            if (!player.swinging && !player.isJumping && input.isdown(Keyboard.SHIFT)) {
+            if (!player.swinging && (player.swordReal.visible || player.swordImag.visible) && !player.isJumping && input.isdown(Keyboard.SHIFT)) {
                 trace("swing!")
                 player.swinging = true
                 // play swing animation
+                player.playerReal.gotoAndStop(Player.SWING_FRAME);
+                player.playerImag.gotoAndStop(Player.SWING_FRAME);
+                player.swordReal.gotoAndStop(Player.SWING_FRAME);
+                player.swordImag.gotoAndStop(Player.SWING_FRAME);
 
                 var timer:Timer = new Timer(player.SWING_TIME);
                 timer.addEventListener(TimerEvent.TIMER, function whenDone():void {
@@ -175,6 +179,12 @@ package ata
                     attackTimer.removeEventListener(TimerEvent.TIMER, attack)
 
                     var hitbox = player.playerImag.getBounds(worldMap[World.IMAGINATION])
+
+                    if (player.playerImag.scaleX < 0) {
+                        hitbox.x -= hitbox.width
+                    } else {
+                        hitbox.x += hitbox.width
+                    }
 
                     if (!player.influencedBy[World.REALITY]) {
                         for each(var e:Entity in entities) {

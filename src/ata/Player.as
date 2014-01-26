@@ -39,10 +39,11 @@ package ata
         private static var DECEL:Number = 600;
         private static var JUMP:Number = 450;
         
-        private static const IDLE_FRAME:uint = 1;
-        private static const WALK_FRAME:uint = 2;
+        public static const IDLE_FRAME:uint = 1;
+        public static const WALK_FRAME:uint = 2;
+        public static const SWING_FRAME:uint = 3;
 
-        public const SWING_TIME:Number = 1000
+        public const SWING_TIME:Number = 12 / 30 * 1000
         
         public function Player(x:int, y:int) {
             super(40*IMG_SCALE, 130*IMG_SCALE);
@@ -121,16 +122,18 @@ package ata
                 playerReal.scaleX = playerImag.scaleX = IMG_SCALE;
             }
             
-            if (Math.abs(speed.x) < 100) {
-                swordReal.gotoAndStop(IDLE_FRAME);
-                swordImag.gotoAndStop(IDLE_FRAME);
-                playerReal.gotoAndStop(IDLE_FRAME);
-                playerImag.gotoAndStop(IDLE_FRAME);                
-            } else {
-                swordReal.gotoAndStop(WALK_FRAME);
-                swordImag.gotoAndStop(WALK_FRAME);
-                playerReal.gotoAndStop(WALK_FRAME);
-                playerImag.gotoAndStop(WALK_FRAME);                
+            if (!swinging) {
+                if (Math.abs(speed.x) < 100) {
+                    swordReal.gotoAndStop(IDLE_FRAME);
+                    swordImag.gotoAndStop(IDLE_FRAME);
+                    playerReal.gotoAndStop(IDLE_FRAME);
+                    playerImag.gotoAndStop(IDLE_FRAME);                
+                } else {
+                    swordReal.gotoAndStop(WALK_FRAME);
+                    swordImag.gotoAndStop(WALK_FRAME);
+                    playerReal.gotoAndStop(WALK_FRAME);
+                    playerImag.gotoAndStop(WALK_FRAME);                
+                }
             }
 
             var hitGround:Boolean;
