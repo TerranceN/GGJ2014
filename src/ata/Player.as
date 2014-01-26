@@ -105,9 +105,9 @@ package ata
             if (influencedBy[World.REALITY]) {
                 hitGround = handleLevelCollision(dt, level.realityCollision, mainCollisionPoints())
                 hitGround = hitGround || handleLevelCollision(dt, level.realityPlatforms, platformCollisionPoints())
-            }    else if (influencedBy[World.IMAGINATION]) {
-                hitGround = handleLevelCollision(dt, level.realityCollision, mainCollisionPoints())
-                hitGround = hitGround || handleLevelCollision(dt, level.realityPlatforms, platformCollisionPoints())
+            } else {
+                hitGround = handleLevelCollision(dt, level.imaginationCollision, mainCollisionPoints())
+                hitGround = hitGround || handleLevelCollision(dt, level.imaginationPlatforms, platformCollisionPoints())
             }
 
             if (hitGround) {

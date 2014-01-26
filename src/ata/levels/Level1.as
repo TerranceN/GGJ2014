@@ -4,6 +4,8 @@ package ata.levels
     import ata.Parent;
     import ata.Input;
     import ata.GameLogic;
+    import flash.display.DisplayObject;
+    import flash.display.Shape;
 	/**
      * ...
      * @author Ryan
@@ -16,8 +18,8 @@ package ata.levels
         
         public function Level1() 
         {
-            super(new playground_reality(), new playground_reality_hitbox(), new playground_reality_platforms(), new playground_imagination());
-            
+            super(new playground_reality(), new playground_reality_hitbox(), new playground_reality_platforms(),
+                    new playground_imagination(), new playground_reality_hitbox(), new playground_imagination_platforms());
         }
         
         
@@ -37,7 +39,7 @@ package ata.levels
             }
         }
         
-        override public function setupLevel(logic:GameLogic) 
+        override public function setupLevel(logic:GameLogic):void
         {
             super.setupLevel(logic);
             
