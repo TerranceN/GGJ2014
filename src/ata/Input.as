@@ -77,7 +77,7 @@
 			if (isdown(e.keyCode)) keys[e.keyCode] = released;
 		}
 		private function mousedown(e:MouseEvent):void {
-			if (isdown(MOUSE_KEY)) keys[MOUSE_KEY] = pressed;
+			if (! isdown(MOUSE_KEY)) keys[MOUSE_KEY] = pressed;
 		}
 		private function mouseup(e:MouseEvent):void {
 			if (isdown(MOUSE_KEY)) keys[MOUSE_KEY] = released;

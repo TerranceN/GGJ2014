@@ -7,6 +7,7 @@ package ata
     import flash.display.Sprite;
     import flash.events.Event;
     import flash.geom.Point;
+    import flash.geom.Rectangle;
     import flash.system.fscommand;
     import flash.ui.Keyboard;
     import flash.utils.getTimer;
@@ -45,7 +46,7 @@ package ata
         public var player:Player;
 
         private var level:Level;
-        public var levelNum:int;
+        public var levelNum:int = -1;
         private var levelList:Vector.<Level>;
         
         private var entities:Vector.<Entity> = new Vector.<Entity>();
@@ -86,7 +87,10 @@ package ata
             levelList = new Vector.<Level>();
             levelList.push(new Level1());
             levelList.push(new Level2());
+            
+            player = new Player(75, 0);
             setLevel(0);
+            
         }
         
         public function clearEntities():void {
@@ -106,7 +110,6 @@ package ata
             
             clearEntities();
             
-            levelNum = n;
             level = levelList[n];
             
             addEntity(level);
@@ -115,16 +118,28 @@ package ata
             
             //addEntity(new Bird(w / 3, - h / 4));
             
-            player = new Player(75, 0);
+            if (levelNum > n) { // going left
+                player.x = player.position.x = level.x2 - 75;
+            } else {
+                player.x = player.position.x = 75;
+            }
+            player.y = player.position.y = 0;
+            //player = new Player(75,0);
             addEntity(player);
+            player.bubble = GameLogic.worldMap[World.IMAGINATION].addAdditiveBubble(player, 200);
             
-            // only do this on some levels
-            if (levelNum == 0) {
+            // only do this on level 1 and if the player doesnt already have a sword
+            if (n == 0 && ! player.swordReal.visible) {
                 var testObj:CarryableObject = new CarryableObject(new Vector2(level.x2 - 700, player.position.y), new RSword(), new ISword());
                 carryableObjects.push(testObj);
             }
+            levelNum = n;
         }
-
+        
+        private function actionKeyPressed():Boolean {
+        return (input.isdown(Keyboard.V) || input.isdown(Keyboard.Z) || input.isdown(Keyboard.X) || input.isdown(Keyboard.C) || input.isdown(Keyboard.ENTER) || input.isdown(Keyboard.SHIFT) || input.isdown(Input.MOUSE_KEY));
+        }
+            
         public function update(dt:Number):void {
             var t:uint = getTimer();
             dt =  Math.min(0.1, (t - totaltime) / 1000);
@@ -157,8 +172,9 @@ package ata
                 }
                 draw();
             }
-
-            if (!player.swinging && (player.swordReal.visible || player.swordImag.visible) && !player.isJumping && input.isdown(Keyboard.SHIFT)) {
+            // && !player.isJumping
+            if (!player.swinging && (player.swordReal.visible || player.swordImag.visible) && actionKeyPressed())
+            {
                 trace("swing!")
                 player.swinging = true
                 // play swing animation
@@ -179,7 +195,7 @@ package ata
                 attackTimer.addEventListener(TimerEvent.TIMER, function attack():void {
                     attackTimer.removeEventListener(TimerEvent.TIMER, attack)
 
-                    var hitbox = player.playerImag.getBounds(worldMap[World.IMAGINATION])
+                    var hitbox:Rectangle = player.playerImag.getBounds(worldMap[World.IMAGINATION])
 
                     if (player.playerImag.scaleX < 0) {
                         hitbox.x -= hitbox.width
@@ -221,8 +237,7 @@ package ata
                     // objects are close enough, prompt player
 
                     // if player presses v, pick up the object
-                    if (input.isdown(Keyboard.V)) {
-                        trace("qwerty")
+                    if (actionKeyPressed()) {
                         obj.setPickedUp()
                         player.swordImag.visible = true;
                         player.swordReal.visible = true;
@@ -341,7 +356,7 @@ package ata
             {
                 for each(var starEntity:Star in stars)
                 {
-                    if (player.position.diff(starEntity.position) < (player.size.length() + starEntity.size.length())/4)
+                    if (player.position.diff(starEntity.position) < (player.size.length() + starEntity.size.length())/3)
                     {
                         removeEntity(starEntity);
                         stars.splice(stars.indexOf(starEntity), 1);

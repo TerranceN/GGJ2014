@@ -19,6 +19,8 @@ package ata
         private static const REAL_SCALE:Number = 0.7;
         private static const IMAG_SCALE:Number = 1.3;
         private static const SPEED:Number = 150;
+        public var x1:Number;
+        public var x2:Number;
         
         public function Bird(x:int, y:int) {
             super(40*IMAG_SCALE, 40*IMAG_SCALE);
@@ -36,7 +38,7 @@ package ata
             addDisplay(World.IMAGINATION, imgImag);
         }
 
-        public function remove() {
+        public function remove():void {
             imgReal.parent.removeChild(imgReal)
             imgImag.parent.removeChild(imgImag)
 
@@ -47,9 +49,9 @@ package ata
         }
 
         override public function update(input:Input, dt:Number, level:Level):void {
-            if (position.x > level.birdX2) {
+            if (position.x > x2) {
                 speed.x = -SPEED;
-            } else if (position.x < level.birdX1) {
+            } else if (position.x < x1) {
                 speed.x = SPEED;
             }
 

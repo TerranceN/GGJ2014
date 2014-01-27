@@ -15,7 +15,7 @@ package ata.levels
     public class Level1 extends Level
     {
         
-        private const movement:Number = 130;
+        private const movement:Number = 150;
         private var parentObj:Parent;
         private var firstStar:Star;
         private var bird:Bird
@@ -55,14 +55,16 @@ package ata.levels
             logic.stars.push(firstStar);
             logic.addEntity(firstStar);
 
-            var height = -250;
-
-            bird = new Bird(x2 - 1000, height);
+            bird = new Bird(x2 - 1000, -250);
             logic.addEntity(bird)
-
-            birdX1 = x2 - 1200;
-            birdX2 = x2 - 700;
+            bird.x1 = x2 - 1200;
+            bird.x2 = x2 - 700;
             
+            bird = new Bird(1000, -300);
+            logic.addEntity(bird)
+            bird.x1 = 500;
+            bird.x2 = 1200;
+
             var nextStar:Star = new Star();
             nextStar.position.x = 350;
             nextStar.position.y = -500;
